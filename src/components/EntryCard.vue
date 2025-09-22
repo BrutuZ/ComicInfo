@@ -4,7 +4,6 @@ import { ref } from 'vue'
 import MetadataField from './MetadataField.vue'
 import { buildXML } from './ModalDialog.vue'
 import TagsButtons from './TagsButtons.vue'
-import TagContainer from './TagContainer.vue'
 
 // const props = defineProps<{ manga: MangaInfo }>()
 // const manga = ref(props.manga)
@@ -57,10 +56,7 @@ const coverEvent = () => {
           <MetadataField v-model.list="manga.author">Author</MetadataField>
           <MetadataField v-model.list="manga.artist">Artist</MetadataField>
           <MetadataField v-model.list="manga.genre" type="textarea" rows="3">Genres</MetadataField>
-          <TagContainer v-if="manga.genre.length > 20">
-            <TagsButtons v-model="manga.genre" />
-          </TagContainer>
-          <TagsButtons v-else v-model="manga.genre" />
+          <TagsButtons v-model="manga.genre" />
           <div class="text-end">
             <i class="bi bi-download" role="button" @click="xml = buildXML(manga)"></i>
           </div>

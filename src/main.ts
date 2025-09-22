@@ -3,8 +3,8 @@ import App from './App.vue'
 // import router from './router'
 
 // Import our custom CSS
-import './styles.scss'
 import { Tooltip } from 'bootstrap'
+import './styles.scss'
 
 // import Alert from 'bootstrap/js/dist/alert';
 
@@ -55,7 +55,7 @@ export function listField(value: string | string[]): string[] | string {
 }
 
 export function capitalizeTags(str: string) {
-  return str.replace('_', ' ').replace(/(?<=[\\/]?)\w\S*/g, txt => {
+  return str.replace(/_/g, ' ').replace(/(?<=[\\/]?)\w\S*/g, txt => {
     return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
   })
 }

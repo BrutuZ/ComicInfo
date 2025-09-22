@@ -12,8 +12,8 @@ defineProps<{
 }>()
 
 const options = ref({
-  url: !DEV ? 'https://mangabaka.dev/84926' : '',
-  parserParams: { english: true, proxy: true } as ParserOptions,
+  url: DEV ? 'https://mangabaka.dev/84926' : '',
+  parserParams: { english: true, proxy: false } as ParserOptions,
 })
 const formValidated = ref(false)
 const validUrl = ref(false)
@@ -110,18 +110,16 @@ const validateForm = (urlInput: string | Event | undefined) => {
 const addItem = () => {
   validateForm(options.value.url)
   if (options.value.url) {
-    options.value.url
-      .trim()
-      .split(' ')
-      .forEach(url => {
-        parsers.forEach(parser => {
-          if (!parser(url).validateUrl()) return
-          parser(url, options.value.parserParams)
-            .parse()
-            .then(info => (mangaEntries.value = [...info, ...mangaEntries.value]))
-        })
-        options.value.url.replace(url, '').trim()
+    const urls = options.value.url.trim().split(' ')
+    urls.forEach(url => {
+      parsers.forEach(parser => {
+        if (!parser(url).validateUrl()) return
+        parser(url, options.value.parserParams)
+          .parse()
+          .then(info => (mangaEntries.value = [...info, ...mangaEntries.value]))
       })
+      options.value.url = options.value.url.replace(url, '').trim()
+    })
   }
   // tree-shaking should get rid of this
   if (DEV) {
@@ -213,7 +211,7 @@ const addItem = () => {
             v-model="options.parserParams.english"
           />
         </div>
-        <div id="proxy-pref" class="form-check form-switch">
+        <div v-if="DEV" id="proxy-pref" class="form-check form-switch">
           <label for="proxy-switch" class="form-check-label">Proxy Requests</label>
           <input
             id="proxy-switch"

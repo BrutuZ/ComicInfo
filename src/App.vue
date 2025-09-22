@@ -5,6 +5,7 @@ import ModalDialog from '@/components/ModalDialog.vue'
 import { bsTooltips } from '@/main'
 import { MangaInfo } from '@/types'
 import { onMounted, ref } from 'vue'
+import FormSearch from './components/FormSearch.vue'
 import NavTab from './components/NavTab.vue'
 
 const DEV = import.meta.env.DEV
@@ -28,6 +29,7 @@ onMounted(() => bsTooltips().create())
 
   <div class="mb-3 border rounded-bottom p-2">
     <FormURL v-if="activeTab == 'url'" :DEV v-model:manga-entries="mangaEntries" />
+    <FormSearch v-else-if="activeTab == 'search'" :DEV v-model:manga-entries="mangaEntries" />
   </div>
 
   <TransitionGroup name="entry-cards">

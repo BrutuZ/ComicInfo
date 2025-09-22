@@ -1,5 +1,18 @@
 import type { FuzzyDate } from './AnilistType'
 
+export interface SearchResponse {
+  status: number
+  message?: string
+  pagination: {
+    count: number
+    next?: string
+    previous?: string
+    page: number
+    limit: number
+  }
+  data?: SeriesData[]
+}
+
 export interface MangaResponse {
   status: number
   data?: SeriesData
@@ -798,7 +811,7 @@ export interface SourceMangaUpdates {
       type: 'Author' | 'Artist'
       [k: string]: unknown
     }[]
-    publishers: {
+    publishers?: {
       publisher_name: string
       publisher_id: number
       url: string

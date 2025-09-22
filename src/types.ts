@@ -12,7 +12,7 @@ export class MangaInfo {
   status: TachiStatus = 'Unknown'
   // date?: string
   dateObj: Date
-  source?: SourceFields
+  source?: SourceInfo
   publisher: string = ''
   uuid: string = crypto.randomUUID()
   error?: string
@@ -28,7 +28,7 @@ export class MangaInfo {
     status = 'Unknown' as TachiStatus,
     date = dateToString(new Date()),
     // dateObj = new Date(),
-    source = { name: 'Unknown' } as SourceFields,
+    source = { name: 'Unknown' } as SourceInfo,
     publisher = '',
     uuid = crypto.randomUUID(),
   } = {}) {
@@ -105,10 +105,13 @@ export interface MetadataField {
   type?: 'text' | 'textarea' | 'date' | 'status'
 }
 
-export interface Parser extends SourceFields {
-  sources?: SourceFields[]
+export interface Parser extends MultiSource {
   validateUrl: () => boolean
   parse: () => Promise<MangaInfo[]>
+}
+
+export interface Searcher extends Parser {
+  search: (query: string) => Promise<MangaInfo[]>
 }
 
 export interface ParserOptions {
@@ -116,8 +119,12 @@ export interface ParserOptions {
   proxy?: boolean
 }
 
-export interface SourceFields {
+export interface SourceInfo {
   name?: string
   icon?: string
   url?: string
+}
+
+interface MultiSource extends SourceInfo {
+  sources?: SourceInfo[]
 }

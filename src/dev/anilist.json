@@ -1,0 +1,101 @@
+{
+  "data": {
+    "manga": {
+      "title": {
+        "romaji": "Dungeon no Osananajimi",
+        "native": "ダンジョンの幼なじみ",
+        "english": "Dungeon Friends Forever"
+      },
+      "synonyms": [],
+      "status": "RELEASING",
+      "coverImage": {
+        "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/b149323-HnylqUxibojw.jpg",
+        "large": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/b149323-HnylqUxibojw.jpg"
+      },
+      "description": "Van and Ryuka the dragon girl have been friends since childhood. As adults, Van has become a dashing adventurer, and Ryuka has become the boss of a dangerous dungeon! Now Van has to beat up a bunch of Ryuka’s monster underlings every time he wants to bring her food, plan a game night with her, or just hang out. Fantasies come alive in this delightful rom-com about two friends on the verge of love and the monsters who ship them!\n<br><br>\n(Source: Seven Seas Entertainment)",
+      "genres": ["Comedy", "Fantasy", "Romance"],
+      "tags": [
+        {
+          "name": "Monster Girl"
+        },
+        {
+          "name": "Heterosexual"
+        },
+        {
+          "name": "Dungeon"
+        },
+        {
+          "name": "Dragons"
+        },
+        {
+          "name": "Iyashikei"
+        },
+        {
+          "name": "Anthropomorphism"
+        },
+        {
+          "name": "Magic"
+        },
+        {
+          "name": "Demons"
+        }
+      ],
+      "startDate": {
+        "day": 3,
+        "month": 2,
+        "year": 2022
+      },
+      "meanScore": 72,
+      "countryOfOrigin": "JP",
+      "externalLinks": [
+        {
+          "site": "Nico Nico Seiga",
+          "url": "https://seiga.nicovideo.jp/comic/56857"
+        },
+        {
+          "site": "ComicWalker",
+          "url": "https://comic-walker.com/contents/detail/KDCW_MF02202813010000_68/"
+        },
+        {
+          "site": "Seven Seas Entertainment",
+          "url": "https://sevenseasentertainment.com/series/dungeon-friends-forever/"
+        }
+      ],
+      "volumes": null,
+      "chapters": null,
+      "endDate": {
+        "year": null,
+        "month": null,
+        "day": null
+      },
+      "staff": {
+        "edges": [
+          {
+            "role": "Story & Art",
+            "node": {
+              "name": {
+                "full": "Yasuhisa Kuma"
+              }
+            }
+          },
+          {
+            "role": "Translator (English)",
+            "node": {
+              "name": {
+                "full": "Kevin Yuan"
+              }
+            }
+          },
+          {
+            "role": "Lettering (English)",
+            "node": {
+              "name": {
+                "full": "Ochie Caraan"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

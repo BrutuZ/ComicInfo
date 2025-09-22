@@ -236,14 +236,15 @@ const addItem = () => {
         <small class="form-text col-sm-4">
           Supported sites:
           <span>
-            <!-- v-if="!Array.isArray(source.name)" -->
-            <!-- <template> -->
-            <SourceIcon
-              v-for="source in parsers.map(parser => parser())"
-              :key="source.name"
-              :source
-            />
-            <!-- </template> -->
+            <template v-for="source in parsers.map(parser => parser())" :key="source.name">
+              <SourceIcon v-if="!Array.isArray(source.sources)" :source />
+              <SourceIcon
+                v-else
+                v-for="src in source.sources"
+                :key="src.name"
+                v-bind:source="src"
+              />
+            </template>
           </span>
         </small>
         <span

@@ -106,6 +106,7 @@ export interface MetadataField {
 }
 
 export interface Parser extends SourceFields {
+  sources?: SourceFields[]
   validateUrl: () => boolean
   parse: () => Promise<MangaInfo[]>
 }

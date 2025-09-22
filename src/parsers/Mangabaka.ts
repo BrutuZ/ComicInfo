@@ -26,6 +26,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Parser
     name: source.name, // source.map(s => s.name),
     url: `https://${source.url}`, // source.map(s => `https://${s.url}`),
     icon: source.icon, // source.map(s => s.icon),
+    sources: [source, { name: 'MangaDex', url: 'mangadex.org', icon: 'md.png' }],
     validateUrl: () => Boolean(urlRE?.id),
     parse: async () => {
       if (!urlRE)

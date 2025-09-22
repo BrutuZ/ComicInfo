@@ -54,6 +54,12 @@ export function listField(value: string | string[]): string[] | string {
     : value.join(', ')
 }
 
+export function capitalizeTags(str: string) {
+  return str.replace('_', ' ').replace(/(?<=[\\/]?)\w\S*/g, txt => {
+    return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
+  })
+}
+
 export function bsTooltips() {
   const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]')
   return {

@@ -1,4 +1,4 @@
-import { stripHtmlTags } from '@/main'
+import { capitalizeTags, stripHtmlTags } from '@/main'
 import { MangaInfo, type Parser, type ParserOptions, type TachiStatus } from '@/types'
 import type { MangaResponse } from './MangabakaType'
 
@@ -60,10 +60,8 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Parser
         source: source,
         title: options.english ? page.title : page.romanized_title || page.native_title,
         genre: [
-          ...(page.genres || []).map(
-            g => g.replace('_', ' ').charAt(0).toUpperCase() + g.substring(1),
-          ),
-          ...(page.tags || []),
+          ...(page.genres || []).map(g => capitalizeTags(g)).sort(),
+          ...(page.tags || []).sort(),
         ],
         artist: page.artists,
         author: page.authors,

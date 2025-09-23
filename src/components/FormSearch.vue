@@ -48,7 +48,8 @@ const search = () => {
       </span>
     </div>
   </form>
-  <ul v-if="results.length" id="search-results">
+  <ul id="search-results" class="ps-0" hidden>
+    <li v-if="results.length == 0" class="p-3 text-center"><h4>No Results</h4></li>
     <li
       v-for="manga in results"
       :key="manga.parsed.uuid"
@@ -74,11 +75,12 @@ const search = () => {
 
 <style lang="scss">
 #search-results {
+  cursor: pointer;
   > li {
     overflow: clip;
   }
   & img {
-    height: calc(($small-font-size + $form-text-margin-top) * 3);
+    height: calc(($font-size-base + $form-text-margin-top) * 4);
   }
 }
 </style>

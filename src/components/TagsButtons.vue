@@ -20,7 +20,7 @@ const collapsed = ref(true)
     </span>
   </span>
   <i
-    class="text-center bi"
+    class="tags-resizer text-center bi"
     :class="{ 'bi-arrow-bar-down': collapsed, 'bi-arrow-bar-up': !collapsed }"
     @click="collapsed = !collapsed"
   ></i>
@@ -28,12 +28,15 @@ const collapsed = ref(true)
 
 <style lang="scss">
 .tags-container {
-  transition: max-height 0.15s ease-in;
-  max-height: 300vh;
+  transition: max-height 0.3s ease-in-out;
+  max-height: 150vh;
   overflow: hidden;
   // overflow: auto;
 }
 .tags-container.collapsed {
   max-height: calc(($spacer + $badge-font-size) * 3);
+}
+.tags-resizer {
+  cursor: pointer;
 }
 </style>

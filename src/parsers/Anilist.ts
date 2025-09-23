@@ -1,6 +1,6 @@
 import { stripHtmlTags } from '@/main'
+import type { Edge, Root } from '@/parsers/AnilistType'
 import { MangaInfo, type Parser, type ParserOptions, type TachiStatus } from '@/types'
-import type { Edge, Root } from './AnilistType'
 
 const statusMap = {
   FINISHED: 'Completed',

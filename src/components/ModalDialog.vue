@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import BSAlert from '@/components/BSAlert.vue'
 import { bsTooltips } from '@/main'
 import { onMounted, onUnmounted, ref } from 'vue'
-import BSAlert from './BSAlert.vue'
 
 const xml = defineModel<string>('xml', { required: true })
 const alertRef = ref()

@@ -1,4 +1,4 @@
-import type { FuzzyDate } from './AnilistType'
+import type { FuzzyDate } from '@/parsers/AnilistType'
 
 export interface SearchResponse {
   status: number

@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import MetadataField from '@/components/MetadataField.vue'
+import { buildXML } from '@/components/ModalDialog.vue'
+import TagsButtons from '@/components/TagsButtons.vue'
 import { MangaInfo } from '@/types'
 import { ref } from 'vue'
-import MetadataField from './MetadataField.vue'
-import { buildXML } from './ModalDialog.vue'
-import TagsButtons from './TagsButtons.vue'
 
 // const props = defineProps<{ manga: MangaInfo }>()
 // const manga = ref(props.manga)

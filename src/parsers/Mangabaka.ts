@@ -1,6 +1,6 @@
 import { capitalizeTags, stripHtmlTags } from '@/main'
+import type { MangaResponse, SearchResponse, SeriesData } from '@/parsers/MangabakaType'
 import { MangaInfo, type ParserOptions, type Searcher, type TachiStatus } from '@/types'
-import type { MangaResponse, SearchResponse, SeriesData } from './MangabakaType'
 
 const statusMap = {
   completed: 'Completed',

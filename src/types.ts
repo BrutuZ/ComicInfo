@@ -1,5 +1,5 @@
-import { dateToString } from './main'
-import type { SeriesData } from './parsers/MangabakaType'
+import { dateToString } from '@/main'
+import type { SeriesData } from '@/parsers/MangabakaType'
 
 export class MangaInfo {
   title: string = ''

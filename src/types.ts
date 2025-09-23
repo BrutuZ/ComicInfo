@@ -134,3 +134,5 @@ export interface SourceInfo {
 interface MultiSource extends SourceInfo {
   sources?: SourceInfo[]
 }
+
+export type FormTabs = 'URL' | 'Search' | 'File'

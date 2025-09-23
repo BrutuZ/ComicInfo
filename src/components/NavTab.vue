@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const activeTab = defineModel<'url' | 'search' | 'file'>('activeTab', { default: 'url' })
+import type { FormTabs } from '@/types'
+
+const activeTab = defineModel<FormTabs>('activeTab', { default: 'URL' })
 defineProps(['tabName'])
 </script>
 

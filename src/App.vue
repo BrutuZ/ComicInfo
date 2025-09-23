@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import EntryCard from '@/components/EntryCard.vue'
+import FormSearch from '@/components/FormSearch.vue'
 import FormURL from '@/components/FormURL.vue'
 import ModalDialog from '@/components/ModalDialog.vue'
+import NavTab from '@/components/NavTab.vue'
 import { bsTooltips } from '@/main'
-import { MangaInfo, type ParserOptions } from '@/types'
+import { MangaInfo, type FormTabs, type ParserOptions } from '@/types'
 import { onMounted, ref } from 'vue'
-import FormSearch from './components/FormSearch.vue'
-import NavTab from './components/NavTab.vue'
 
 const DEV = import.meta.env.DEV
 
 const mangaEntries = ref<MangaInfo[]>([])
 const xml = ref('')
-const activeTab = ref<'url' | 'search' | 'file'>('url')
+const activeTab = ref<FormTabs>('URL')
 onMounted(() => bsTooltips().create())
 const options = ref({
   url: DEV ? 'https://mangabaka.dev/84926' : '',
   parserParams: { english: true, proxy: false } as ParserOptions,
 })
+
+const tabs = { URL: FormURL, Search: FormSearch, File: FormURL }
 </script>
 
 <template>
@@ -26,24 +28,22 @@ const options = ref({
   </TransitionGroup>
 
   <ul id="nav-bar" class="nav nav-tabs mt-2">
-    <NavTab v-model:active-tab="activeTab" tab-name="url">URL</NavTab>
-    <NavTab v-model:active-tab="activeTab" tab-name="search">Search</NavTab>
-    <NavTab v-model:active-tab="activeTab" tab-name="file">File</NavTab>
+    <NavTab
+      v-for="(comp, name) in tabs"
+      :key="name"
+      :tab-name="name"
+      v-model:active-tab="activeTab"
+      >{{ name }}</NavTab
+    >
   </ul>
 
   <div class="mb-3 border rounded-bottom p-2">
-    <FormURL
-      v-if="activeTab == 'url'"
+    <component
+      :is="tabs[activeTab]"
       :DEV
       v-model:options="options"
       v-model:manga-entries="mangaEntries"
-    />
-    <FormSearch
-      v-else-if="activeTab == 'search'"
-      :DEV
-      v-model:options="options"
-      v-model:manga-entries="mangaEntries"
-    />
+    ></component>
   </div>
 
   <TransitionGroup name="entry-cards">

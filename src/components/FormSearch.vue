@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { capitalizeTags, unique } from '@/main'
 import { MangaBaka } from '@/parsers/Mangabaka'
-import { MangaInfo } from '@/types'
+import { MangaInfo, type ParserOptions, type SearchResult } from '@/types'
 import { ref } from 'vue'
 
 const mangaEntries = defineModel<MangaInfo[]>('mangaEntries', { default: [] })
@@ -8,7 +9,7 @@ defineProps<{
   DEV: boolean
 }>()
 const query = ref('')
-const results = ref<MangaInfo[]>([])
+const results = ref<SearchResult[]>([])
 const searchers = [MangaBaka]
 
 const search = () => {
@@ -50,14 +51,22 @@ const search = () => {
   <ul v-if="results.length" id="search-results">
     <li
       v-for="manga in results"
-      :key="manga.uuid"
+      :key="manga.parsed.uuid"
       class="dropdown-item d-flex"
-      @click="mangaEntries.push(manga)"
+      @click="mangaEntries.push(manga.parsed)"
     >
-      <img :src="manga.cover" class="p-2" />
+      <img :src="manga.raw.cover.small || manga.raw.cover.default" class="p-2" />
       <span>
-        {{ manga.title }} ({{ manga.dateObj.getFullYear() }})<br />
-        <small>{{ manga.artist?.join(', ') }}</small>
+        {{ manga.raw.title }} ({{ manga.raw.year }}) <i>{{ manga.parsed.status }}</i
+        ><br />
+        <small>{{ unique([...manga.raw.artists, ...manga.raw.authors]).join(', ') }}</small
+        ><br />
+        <small>{{
+          (manga.raw.genres || ['Unknown Genres'])
+            .map(g => capitalizeTags(g))
+            .sort()
+            .join(', ')
+        }}</small>
       </span>
     </li>
   </ul>

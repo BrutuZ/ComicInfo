@@ -54,6 +54,10 @@ export function listField(value: string | string[]): string[] | string {
     : value.join(', ')
 }
 
+export function unique(value: string[]): string[] {
+  return Array.from(new Set(value))
+}
+
 export function capitalizeTags(str: string) {
   return str.replace(/_/g, ' ').replace(/(?<=[\\/]?)\w\S*/g, txt => {
     return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()

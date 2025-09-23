@@ -1,6 +1,6 @@
 import { capitalizeTags, stripHtmlTags } from '@/main'
 import { MangaInfo, type ParserOptions, type Searcher, type TachiStatus } from '@/types'
-import type { MangaResponse, SearchResponse } from './MangabakaType'
+import type { MangaResponse, SearchResponse, SeriesData } from './MangabakaType'
 
 const statusMap = {
   completed: 'Completed',
@@ -58,40 +58,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         })
       if ('error' in page) return [page as MangaInfo]
 
-      const data = new MangaInfo({
-        source: source,
-        title: options.english ? page.title : page.romanized_title || page.native_title,
-        genre: [
-          ...(page.genres || []).map(g => capitalizeTags(g)).sort(),
-          ...(page.tags || []).sort(),
-        ],
-        artist: page.artists,
-        author: page.authors,
-        cover: page.cover.default,
-        status: statusMap[page.status] as TachiStatus,
-        publisher: page.publishers?.map(p => p.name).join(', '),
-        description: page.description,
-        url: (page.links || []).join(' '),
-      })
-      if (page.description) {
-        data.description = stripHtmlTags(page.description)
-      }
-      // if (page.synonyms.length > 0) {
-      data.description +=
-        `\n\nAlternate titles:\n- ` +
-        [
-          ...new Set([
-            page.title,
-            page.romanized_title,
-            page.native_title,
-            ...Object.values(page.secondary_titles).flatMap(o => o.map(e => e.title)),
-          ]),
-        ]
-          .filter(t => t != data.title)
-          .join('\n- ')
-      // }
-      if (page.year) data.date = `${page.year}-01-01`
-      return [data]
+      return [buildInfo(page)]
     },
     search: async (query: string) => {
       const page = await fetch(
@@ -116,19 +83,44 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         })
       if ('error' in page) return [page as MangaInfo]
 
-      const data = page.map(parsed => {
-        const manga = new MangaInfo({
-          title: options.english ? parsed.title : parsed.romanized_title || parsed.native_title,
-          artist: parsed.artists,
-          author: parsed.authors,
-          cover: parsed.cover.small || parsed.cover.default,
-          status: statusMap[parsed.status] as TachiStatus,
-          publisher: parsed.publishers?.map(p => p.name).join(', '),
-        })
-        if (parsed.year) manga.date = `${parsed.year}-01-01`
-        return manga
-      })
-      return data
+      return page.map(parsed => Object({ parsed: buildInfo(parsed), raw: parsed }))
     },
+  }
+
+  function buildInfo(page: SeriesData) {
+    const info = new MangaInfo({
+      source: source,
+      title: options.english ? page.title : page.romanized_title || page.native_title,
+      genre: [
+        ...(page.genres || []).map(g => capitalizeTags(g)).sort(),
+        ...(page.tags || []).sort(),
+      ],
+      artist: page.artists,
+      author: page.authors,
+      cover: page.cover.raw || page.cover.default,
+      status: statusMap[page.status] as TachiStatus,
+      publisher: page.publishers?.map(p => p.name).join(', '),
+      description: page.description,
+      url: (page.links || []).join(' '),
+    })
+    if (page.description) {
+      info.description = stripHtmlTags(page.description)
+    }
+    // if (page.synonyms.length > 0) {
+    info.description +=
+      `\n\nAlternate titles:\n- ` +
+      [
+        ...new Set([
+          page.title,
+          page.romanized_title,
+          page.native_title,
+          ...Object.values(page.secondary_titles).flatMap(o => o.map(e => e.title)),
+        ]),
+      ]
+        .filter(t => t != info.title)
+        .join('\n- ')
+    // }
+    if (page.year) info.date = `${page.year}-01-01`
+    return info
   }
 }

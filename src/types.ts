@@ -1,4 +1,5 @@
 import { dateToString } from './main'
+import type { SeriesData } from './parsers/MangabakaType'
 
 export class MangaInfo {
   title: string = ''
@@ -111,7 +112,12 @@ export interface Parser extends MultiSource {
 }
 
 export interface Searcher extends Parser {
-  search: (query: string) => Promise<MangaInfo[]>
+  search: (query: string) => Promise<SearchResult[]>
+}
+
+export interface SearchResult {
+  parsed: MangaInfo
+  raw: SeriesData
 }
 
 export interface ParserOptions {

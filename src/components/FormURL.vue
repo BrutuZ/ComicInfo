@@ -10,10 +10,8 @@ const mangaEntries = defineModel<MangaInfo[]>('mangaEntries', { default: [] })
 defineProps<{
   DEV: boolean
 }>()
-
-const options = ref({
-  url: DEV ? 'https://mangabaka.dev/84926' : '',
-  parserParams: { english: true, proxy: false } as ParserOptions,
+const options = defineModel<{ url: string; parserParams: ParserOptions }>('options', {
+  required: true,
 })
 const formValidated = ref(false)
 const validUrl = ref(false)

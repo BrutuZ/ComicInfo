@@ -8,6 +8,9 @@ const mangaEntries = defineModel<MangaInfo[]>('mangaEntries', { default: [] })
 defineProps<{
   DEV: boolean
 }>()
+const options = defineModel<{ url: string; parserParams: ParserOptions }>('options', {
+  required: true,
+})
 const query = ref('')
 const results = ref<SearchResult[]>([])
 const searchers = [MangaBaka]
@@ -15,7 +18,8 @@ const searchers = [MangaBaka]
 const search = () => {
   console.log(query.value)
   if (!query.value) return
-  searchers[0]()
+  document.querySelector('#search-results')?.removeAttribute('hidden')
+  searchers[0]('', options.value.parserParams)
     .search(query.value)
     .then(sr => (results.value = sr))
 }

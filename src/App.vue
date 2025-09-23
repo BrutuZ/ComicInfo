@@ -3,7 +3,7 @@ import EntryCard from '@/components/EntryCard.vue'
 import FormURL from '@/components/FormURL.vue'
 import ModalDialog from '@/components/ModalDialog.vue'
 import { bsTooltips } from '@/main'
-import { MangaInfo } from '@/types'
+import { MangaInfo, type ParserOptions } from '@/types'
 import { onMounted, ref } from 'vue'
 import FormSearch from './components/FormSearch.vue'
 import NavTab from './components/NavTab.vue'
@@ -14,6 +14,10 @@ const mangaEntries = ref<MangaInfo[]>([])
 const xml = ref('')
 const activeTab = ref<'url' | 'search' | 'file'>('url')
 onMounted(() => bsTooltips().create())
+const options = ref({
+  url: DEV ? 'https://mangabaka.dev/84926' : '',
+  parserParams: { english: true, proxy: false } as ParserOptions,
+})
 </script>
 
 <template>
@@ -28,8 +32,18 @@ onMounted(() => bsTooltips().create())
   </ul>
 
   <div class="mb-3 border rounded-bottom p-2">
-    <FormURL v-if="activeTab == 'url'" :DEV v-model:manga-entries="mangaEntries" />
-    <FormSearch v-else-if="activeTab == 'search'" :DEV v-model:manga-entries="mangaEntries" />
+    <FormURL
+      v-if="activeTab == 'url'"
+      :DEV
+      v-model:options="options"
+      v-model:manga-entries="mangaEntries"
+    />
+    <FormSearch
+      v-else-if="activeTab == 'search'"
+      :DEV
+      v-model:options="options"
+      v-model:manga-entries="mangaEntries"
+    />
   </div>
 
   <TransitionGroup name="entry-cards">

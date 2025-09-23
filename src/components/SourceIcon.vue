@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { SourceFields } from '@/types'
+import type { SourceInfo } from '@/types'
 
-const props = defineProps<{ source: SourceFields }>()
+const props = defineProps<{ source: SourceInfo }>()
 </script>
 
 <template>

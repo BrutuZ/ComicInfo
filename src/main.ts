@@ -60,8 +60,8 @@ export function capitalizeTags(str: string) {
   })
 }
 
-export function bsTooltips() {
-  const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+export function bsTooltips(root?: Element | null) {
+  const tooltips = (root || document).querySelectorAll('[data-bs-toggle="tooltip"]')
   return {
     create: (options?: Partial<Tooltip.Options>) => {
       tooltips.forEach(el => new Tooltip(el, options))

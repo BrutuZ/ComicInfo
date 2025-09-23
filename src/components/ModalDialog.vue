@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Alert } from 'bootstrap'
+import { bsTooltips } from '@/main'
 import { onMounted, onUnmounted, ref } from 'vue'
+import BSAlert from './BSAlert.vue'
 
 const xml = defineModel<string>('xml', { required: true })
 const alertRef = ref()
@@ -12,31 +13,22 @@ const downloadXML = () => {
 function clipboard() {
   alertRef.value = true
   navigator.clipboard.writeText(xml.value)
-  setTimeout(() => {
-    alertRef.value = undefined
-  }, 1500)
 }
 
 onMounted(() => {
-  bsTooltips().create({
+  bsTooltips(document.querySelector('.modal')).create({
     trigger: 'hover focus',
     placement: 'auto',
-  })
-  document.querySelectorAll('[role="alert"]').forEach(el => {
-    if (el) {
-      alertRef.value = { element: el, alert: Alert.getOrCreateInstance(el) }
-      // el.addEventListener('closed.bs.alert', () => (alertToggle.value = false))
-    }
   })
 })
 
 onUnmounted(() => {
-  bsTooltips().destroy()
+  bsTooltips(document.querySelector('.modal')).destroy()
 })
 </script>
 
 <script lang="ts">
-import { bsTooltips, listField } from '@/main'
+import { listField } from '@/main'
 import type { MangaInfo } from '@/types'
 import { create } from 'xmlbuilder2'
 
@@ -67,17 +59,10 @@ export function buildXML(manga: MangaInfo) {
 
 <template>
   <div class="modal" id="outputModal" aria-labelledby="outputModalLabel">
-    <TransitionGroup name="entry-cards">
-      <div
-        v-if="alertRef"
-        class="alert alert-success fixed-top align-items-center"
-        role="alert"
-        style="z-index: 65535"
-      >
-        <i class="bi bi-info" role="img" aria-label="Info:"></i>
-        XML Copied to clipboard
-      </div>
-    </TransitionGroup>
+    <BSAlert v-if="alertRef" v-model="alertRef" :duration="1500">
+      <i class="bi bi-info" role="img" aria-label="Info:"></i>
+      XML Copied to clipboard
+    </BSAlert>
     <div class="modal-dialog modal-dialog-scrollable modal-xl">
       <div class="modal-content">
         <div class="modal-header justify-content-between">

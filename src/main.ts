@@ -64,6 +64,8 @@ export function capitalizeTags(str: string) {
   })
 }
 
+export const replaceSmartQuotes = (str: string) => str.replace(/[“”]/g, '"').replace(/[‘’]/g, "'")
+
 export function bsTooltips(root?: Element | null) {
   const tooltips = (root || document).querySelectorAll('[data-bs-toggle="tooltip"]')
   return {

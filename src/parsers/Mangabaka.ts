@@ -1,4 +1,4 @@
-import { capitalizeTags, stripHtmlTags } from '@/main'
+import { capitalizeTags, replaceSmartQuotes, stripHtmlTags } from '@/main'
 import type { MangaResponse, SearchResponse, SeriesData } from '@/parsers/MangabakaType'
 import { MangaInfo, type ParserOptions, type Searcher, type TachiStatus } from '@/types'
 
@@ -50,7 +50,13 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           },
         },
       )
-        .then(response => response.json() as Promise<MangaResponse>)
+        .then(response => response.text())
+        .then(
+          txt =>
+            JSON.parse(txt, (_, v) =>
+              typeof v == 'string' ? replaceSmartQuotes(v) : v,
+            ) as Promise<MangaResponse>,
+        )
         .then(parsed => parsed.data || { error: parsed.message })
         .catch(e => {
           console.error(e)
@@ -75,7 +81,13 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           },
         },
       )
-        .then(response => response.json() as Promise<SearchResponse>)
+        .then(response => response.text())
+        .then(
+          txt =>
+            JSON.parse(txt, (_, v) =>
+              typeof v == 'string' ? replaceSmartQuotes(v) : v,
+            ) as Promise<SearchResponse>,
+        )
         .then(parsed => parsed.data || { error: parsed.message })
         .catch(e => {
           console.error(e)
@@ -90,7 +102,10 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
   function buildInfo(page: SeriesData) {
     const info = new MangaInfo({
       source: source,
-      title: options.english ? page.title : page.romanized_title || page.native_title,
+      title:
+        (options.english
+          ? page.title || page.romanized_title
+          : page.romanized_title || page.title) || page.native_title,
       genre: [
         ...(page.genres || []).map(g => capitalizeTags(g)).sort(),
         ...(page.tags || []).sort(),

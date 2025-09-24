@@ -17,7 +17,7 @@ const searchers = [MangaBaka]
 const progress = ref('No Results')
 
 const search = () => {
-  console.log(query.value)
+  results.value = []
   if (!query.value) return
   progress.value = 'Searching...'
   document.querySelector('#button-search')?.toggleAttribute('disabled', true)
@@ -73,7 +73,9 @@ const search = () => {
       <span>
         {{ manga.raw.title }} ({{ manga.raw.year }}) <i>{{ manga.parsed.status }}</i
         ><br />
-        <small>{{ unique([...manga.raw.artists, ...manga.raw.authors]).join(', ') }}</small
+        <small>{{
+          unique([...(manga.raw.artists || []), ...(manga.raw.authors || [])]).join(', ')
+        }}</small
         ><br />
         <small>{{
           (manga.raw.genres || ['Unknown Genres'])

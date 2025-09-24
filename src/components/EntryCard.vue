@@ -16,7 +16,11 @@ const coverEvent = () => {
 }
 
 onMounted(() => {
-  document.querySelector(`#card-${manga.value.uuid}`)?.scrollIntoView({ behavior: 'smooth' })
+  setTimeout(
+    () =>
+      document.querySelector(`#card-${manga.value.uuid}`)?.scrollIntoView({ behavior: 'smooth' }),
+    250,
+  )
 })
 </script>
 

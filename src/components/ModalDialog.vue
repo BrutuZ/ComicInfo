@@ -68,11 +68,11 @@ export function buildXML(manga: MangaInfo) {
         <div class="modal-header justify-content-between">
           <h1 class="modal-title fs-5" id="outputModalLabel">ComicInfo.xml</h1>
         </div>
-        <div class="modal-body user-select-all">
+        <div class="modal-body d-flex user-select-all">
           <button
             data-bs-toggle="tooltip"
             role="button"
-            class="btn btn-outline-secondary translate-middle-x mt-3 start-100 top-0 position-sticky"
+            class="btn btn-outline-secondary translate-middle-x m-3 end-0 top-0 position-absolute"
             aria-label="Copy to Clipboard"
             title="Copy to Clipboard"
             @click="clipboard"

@@ -12,23 +12,28 @@ const options = defineModel<{ url: string; parserParams: ParserOptions }>('optio
   required: true,
 })
 const query = ref('')
+const searching = ref(false)
 const results = ref<SearchResult[]>([])
 const searchers = [MangaBaka]
-const progress = ref('No Results')
+const showResults = ref(false)
 
 const search = () => {
   results.value = []
   if (!query.value) return
-  progress.value = 'Searching...'
-  document.querySelector('#button-search')?.toggleAttribute('disabled', true)
-  document.querySelector('#search-results')?.removeAttribute('hidden')
+  searching.value = true
+  showResults.value = true
   searchers[0]('', options.value.parserParams)
     .search(query.value)
     .then(sr => {
       results.value = sr
-      document.querySelector('#button-search')?.removeAttribute('disabled')
-      progress.value = 'No Results'
     })
+    .finally(() => (searching.value = false))
+}
+
+const addResult = (manga: MangaInfo) => {
+  showResults.value = false
+  mangaEntries.value.unshift(manga)
+  results.value = results.value.filter(e => e.parsed.uuid != manga.uuid)
 }
 </script>
 
@@ -45,6 +50,8 @@ const search = () => {
           aria-describedby="search-input"
           placeholder="One Piece"
           @submit="search"
+          @focusin="showResults = !query == false && results.length > 0"
+          :disabled="searching"
         />
         <button
           class="btn btn-outline-success"
@@ -52,40 +59,48 @@ const search = () => {
           id="button-search"
           title="Search"
           @click="search"
-          :disabled="!DEV && !query"
+          :disabled="searching || !query"
         >
-          <i class="bi bi-search"></i>
+          <i class="bi bi-search" v-if="!searching"></i>
+          <template v-else>
+            <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+            <span class="visually-hidden" role="status">Searching...</span>
+          </template>
         </button>
       </span>
     </div>
   </form>
-  <ul id="search-results" class="ps-0" hidden>
-    <li v-if="results.length == 0" class="p-3 text-center">
-      <h4>{{ progress }}</h4>
-    </li>
-    <li
-      v-for="manga in results"
-      :key="manga.parsed.uuid"
-      class="dropdown-item d-flex"
-      @click="mangaEntries.unshift(manga.parsed)"
-    >
-      <img :src="manga.raw.cover.small || manga.raw.cover.default" class="p-2" />
-      <span>
-        {{ manga.raw.title }} ({{ manga.raw.year }}) <i>{{ manga.parsed.status }}</i
-        ><br />
-        <small>{{
-          unique([...(manga.raw.artists || []), ...(manga.raw.authors || [])]).join(', ')
-        }}</small
-        ><br />
-        <small>{{
-          (manga.raw.genres || ['Unknown Genres'])
-            .map(g => capitalizeTags(g))
-            .sort()
-            .join(', ')
-        }}</small>
-      </span>
-    </li>
-  </ul>
+  <Transition name="unfold">
+    <ul id="search-results" class="ps-0" v-show="showResults">
+      <li v-if="results.length == 0 || searching" class="p-3 text-center">
+        <h4>{{ searching ? 'Searching...' : 'No Results' }}</h4>
+      </li>
+      <li
+        v-for="manga in results"
+        :key="manga.parsed.uuid"
+        class="dropdown-item d-flex"
+        @click="addResult(manga.parsed)"
+      >
+        <img :src="manga.raw.cover.small || manga.raw.cover.default" class="p-2" />
+        <span>
+          [{{ manga.raw.year }}] {{ manga.raw.title }}
+          <br />
+          <i>{{ manga.parsed.status }} | </i>
+          <small>{{
+            unique([...(manga.raw.artists || []), ...(manga.raw.authors || [])]).join(', ')
+          }}</small>
+          <br />
+          <small>{{
+            (manga.raw.genres || ['Unknown Genres'])
+              .map(g => capitalizeTags(g))
+              .sort()
+              .slice(0, 6)
+              .join(', ')
+          }}</small>
+        </span>
+      </li>
+    </ul>
+  </Transition>
 </template>
 
 <style lang="scss">
@@ -97,5 +112,24 @@ const search = () => {
   & img {
     height: calc(($font-size-base + $form-text-margin-top) * 4);
   }
+}
+
+.unfold-move, /* apply transition to moving elements */
+.unfold-enter-active,
+.unfold-leave-active {
+  transition: all 0.5s ease;
+}
+
+.unfold-enter-from,
+.unfold-leave-to {
+  opacity: 0;
+  transform: scaleY(15%);
+  translate: 0 -50%;
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.unfold-leave-active {
+  position: absolute;
 }
 </style>

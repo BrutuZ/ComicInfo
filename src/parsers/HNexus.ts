@@ -1,4 +1,4 @@
-import { dateToString, stringToList, stripCounter } from '@/main'
+import { dateToString, stringToList, stripCounter, stripHtmlTags } from '@/main'
 import { MangaInfo, type Parser, type ParserOptions } from '@/types'
 
 export function HNexus(url: string = '', options: ParserOptions = { proxy: true }): Parser {
@@ -62,7 +62,7 @@ export function HNexus(url: string = '', options: ParserOptions = { proxy: true 
             data.date = dateToString(value ? new Date(value?.textContent.trim()) : new Date())
             break
           case 'Description':
-            data.description = value?.innerHTML?.replace(/\n|<br\/?>/g, '\n').trim() || ''
+            data.description = stripHtmlTags(value?.innerHTML).trim()
             break
           case 'Artist':
             data.artist = stringToList(value?.textContent.trim())

@@ -1,4 +1,4 @@
-import { stripHtmlTags } from '@/main'
+import { blankLine, stripHtmlTags } from '@/main'
 import type { Edge, Root } from '@/parsers/AnilistType'
 import { MangaInfo, type Parser, type ParserOptions, type TachiStatus } from '@/types'
 
@@ -93,7 +93,7 @@ export function AniList(url: string = '', options: ParserOptions = { english: tr
       }
       if (page.synonyms.length > 0) {
         data.description +=
-          `\n\nAlternate titles:\n- ` +
+          `${blankLine}${blankLine}Alternate titles:${blankLine}- ` +
           [...Object.values(page.title).filter(t => t != data.title), ...page.synonyms].join('\n- ')
       }
       if (page.startDate.year)

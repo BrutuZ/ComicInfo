@@ -15,6 +15,8 @@ declare global {
   let DEV: boolean
 }
 
+export const blankLine = '\u00a0\n' // Because Mihon's Markdown parser is stupid
+
 export function stringToList(value: string | undefined) {
   return (value || '')
     .split(/ *, */)
@@ -29,7 +31,7 @@ export function stripCounter(text: string | undefined) {
 export function stripHtmlTags(text?: string) {
   const div = document.createElement('div')
   div.innerHTML = text || ''
-  return div.textContent || div.innerText || ''
+  return (div.textContent || div.innerText || '').replace(/^\n/gm, blankLine)
 }
 export function dateToString(value: Date): string
 export function dateToString(value: string): Date

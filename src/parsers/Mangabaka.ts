@@ -1,4 +1,4 @@
-import { capitalizeTags, replaceSmartQuotes, stripHtmlTags } from '@/main'
+import { blankLine, capitalizeTags, replaceSmartQuotes, stripHtmlTags } from '@/main'
 import type { MangaResponse, SearchResponse, SeriesData } from '@/parsers/MangabakaType'
 import { MangaInfo, type ParserOptions, type Searcher, type TachiStatus } from '@/types'
 
@@ -123,7 +123,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
     }
     // if (page.synonyms.length > 0) {
     info.description +=
-      `\n\nAlternate titles:\n- ` +
+      `\n${blankLine}Alternate titles:\n- ` +
       [
         ...new Set([
           page.title,

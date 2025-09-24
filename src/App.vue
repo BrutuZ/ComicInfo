@@ -28,13 +28,9 @@ const tabs = { URL: FormURL, Search: FormSearch, File: FormURL }
   </TransitionGroup>
 
   <ul id="nav-bar" class="nav nav-tabs mt-2">
-    <NavTab
-      v-for="(comp, name) in tabs"
-      :key="name"
-      :tab-name="name"
-      v-model:active-tab="activeTab"
-      >{{ name }}</NavTab
-    >
+    <NavTab v-for="(_, name) in tabs" :key="name" :tab-name="name" v-model:active-tab="activeTab">
+      {{ name }}
+    </NavTab>
   </ul>
 
   <div class="mb-3 border rounded-bottom p-2">

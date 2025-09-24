@@ -3,7 +3,7 @@ import MetadataField from '@/components/MetadataField.vue'
 import { buildXML } from '@/components/ModalDialog.vue'
 import TagsButtons from '@/components/TagsButtons.vue'
 import { MangaInfo } from '@/types'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 // const props = defineProps<{ manga: MangaInfo }>()
 // const manga = ref(props.manga)
@@ -14,10 +14,14 @@ const coverLoaded = ref(false)
 const coverEvent = () => {
   coverLoaded.value = true
 }
+
+onMounted(() => {
+  document.querySelector(`#card-${manga.value.uuid}`)?.scrollIntoView({ behavior: 'smooth' })
+})
 </script>
 
 <template>
-  <div class="card mb-3">
+  <div class="card mb-3" :id="'card-' + manga.uuid">
     <div class="row g-0">
       <div v-if="manga.source" class="card-header text-center">
         <img v-if="manga.source.icon" :src="`/assets/${manga.source.icon}`" class="source-icons" />

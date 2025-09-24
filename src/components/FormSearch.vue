@@ -14,14 +14,21 @@ const options = defineModel<{ url: string; parserParams: ParserOptions }>('optio
 const query = ref('')
 const results = ref<SearchResult[]>([])
 const searchers = [MangaBaka]
+const progress = ref('No Results')
 
 const search = () => {
   console.log(query.value)
   if (!query.value) return
+  progress.value = 'Searching...'
+  document.querySelector('#button-search')?.toggleAttribute('disabled', true)
   document.querySelector('#search-results')?.removeAttribute('hidden')
   searchers[0]('', options.value.parserParams)
     .search(query.value)
-    .then(sr => (results.value = sr))
+    .then(sr => {
+      results.value = sr
+      document.querySelector('#button-search')?.removeAttribute('disabled')
+      progress.value = 'No Results'
+    })
 }
 </script>
 
@@ -53,12 +60,14 @@ const search = () => {
     </div>
   </form>
   <ul id="search-results" class="ps-0" hidden>
-    <li v-if="results.length == 0" class="p-3 text-center"><h4>No Results</h4></li>
+    <li v-if="results.length == 0" class="p-3 text-center">
+      <h4>{{ progress }}</h4>
+    </li>
     <li
       v-for="manga in results"
       :key="manga.parsed.uuid"
       class="dropdown-item d-flex"
-      @click="mangaEntries.push(manga.parsed)"
+      @click="mangaEntries.unshift(manga.parsed)"
     >
       <img :src="manga.raw.cover.small || manga.raw.cover.default" class="p-2" />
       <span>

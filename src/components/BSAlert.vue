@@ -21,7 +21,7 @@ setTimeout(() => {
 </script>
 
 <template>
-  <TransitionGroup name="entry-cards">
+  <TransitionGroup name="fade-down">
     <div
       class="alert alert-success fixed-top align-items-center"
       role="alert"

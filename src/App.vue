@@ -23,7 +23,7 @@ const tabs = { URL: FormURL, Search: FormSearch, File: FormURL }
 </script>
 
 <template>
-  <TransitionGroup name="entry-cards">
+  <TransitionGroup name="fade-down">
     <ModalDialog v-if="xml" v-model:xml="xml" />
   </TransitionGroup>
 
@@ -42,7 +42,7 @@ const tabs = { URL: FormURL, Search: FormSearch, File: FormURL }
     ></component>
   </div>
 
-  <TransitionGroup name="entry-cards">
+  <TransitionGroup name="fade-down">
     <EntryCard
       v-for="(manga, index) in mangaEntries"
       :key="manga.uuid"

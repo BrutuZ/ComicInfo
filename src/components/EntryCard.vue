@@ -75,21 +75,21 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-.entry-cards-move, /* apply transition to moving elements */
-.entry-cards-enter-active,
-.entry-cards-leave-active {
+.fade-down-move, /* apply transition to moving elements */
+.fade-down-enter-active,
+.fade-down-leave-active {
   transition: all 0.5s ease;
 }
 
-.entry-cards-enter-from,
-.entry-cards-leave-to {
+.fade-down-enter-from,
+.fade-down-leave-to {
   opacity: 0;
   transform: translateY(-30px);
 }
 
 /* ensure leaving items are taken out of layout flow so that moving
    animations can be calculated correctly. */
-// .entry-cards-leave-active {
+// .fade-down-leave-active {
 //   position: absolute;
 // }
 

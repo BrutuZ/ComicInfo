@@ -10,13 +10,6 @@ $nav-link-color: $green;
 $nav-link-hover-color: $teal;
 $card-spacer-x: $spacer * 0.75;
 
-$accordion-button-active-color: var(--#{$prefix}success-text-emphasis);
-$accordion-button-active-bg: var(--#{$prefix}success-bg-subtle);
-// $accordion-color: var(--#{$prefix}success-text);
-// $accordion-active-color: $green-800;
-// $accordion-button-color: var(--#{$prefix}success-text);
-// $accordion-icon-active-color: $success-text-emphasis;
-
 @import 'bootstrap/scss/bootstrap.scss';
 
 // Update the import directory to point to it's location within node_modules

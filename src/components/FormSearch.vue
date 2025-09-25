@@ -72,7 +72,7 @@ const addResult = (manga: MangaInfo) => {
   </form>
   <Transition name="unfold">
     <ul id="search-results" class="ps-0" v-show="showResults">
-      <li v-if="results.length == 0 || searching" class="p-3 text-center">
+      <li v-if="results.length == 0 || searching" class="p-3 text-center" style="cursor: default">
         <h4>{{ searching ? 'Searching...' : 'No Results' }}</h4>
       </li>
       <li

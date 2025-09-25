@@ -121,23 +121,44 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       description: page.description,
       url: (page.links || []).join(' '),
     })
-    if (page.description) {
-      info.description = stripHtmlTags(page.description)
+    const description = []
+    const descriptionHeader = []
+    if (page.rating) {
+      const stars = Number((page.rating / (page.rating < 10 ? 2 : 20)).toFixed())
+      descriptionHeader.push(
+        '★'.repeat(stars) +
+          '☆'.repeat(5 - stars) +
+          ` ${(page.rating < 10 ? page.rating * 10 : page.rating).toFixed(1)}`,
+      )
     }
-    // if (page.synonyms.length > 0) {
-    info.description +=
-      `\n${blankLine}Alternate titles:\n- ` +
-      [
-        ...new Set([
-          page.title,
-          page.romanized_title,
-          page.native_title,
-          ...Object.values(page.secondary_titles).flatMap(o => o.map(e => e.title)),
-        ]),
-      ]
-        .filter(t => t != info.title)
-        .join('\n- ')
-    // }
+    if (page.is_licensed) descriptionHeader.push('💱')
+    if (page.has_anime)
+      descriptionHeader.push(
+        '📺' +
+          (page.anime?.start ? ` From: ${page.anime.start} ` : '') +
+          (page.anime?.end ? `To: ${page.anime.end}` : page.anime?.start ? '?' : ''),
+      )
+    if (descriptionHeader.length > 0) {
+      description.push(descriptionHeader.join(' ') + '\n')
+    }
+
+    if (page.description) description.push(stripHtmlTags(page.description))
+
+    const altTitles = [
+      ...new Set([
+        page.title,
+        page.romanized_title,
+        page.native_title,
+        ...Object.values(page.secondary_titles).flatMap(o => o.map(e => e.title)),
+      ]),
+    ].filter(t => t != info.title)
+    if (altTitles.length > 0) {
+      description.push('')
+      description.push('Alternate titles:\n' + altTitles.map(t => `  - ${t}`).join('\n'))
+    }
+
+    info.description = description.join(blankLine)
+
     if (page.year) info.date = `${page.year}-01-01`
     return info
   }

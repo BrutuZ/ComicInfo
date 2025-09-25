@@ -70,9 +70,12 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       const page = await fetch(
         `${apiUrl}/v1/series/search?` +
           new URLSearchParams(
-            ['safe', 'suggestive', 'erotica', 'pornographic']
-              .map(r => ['content_rating', r])
-              .concat([['q', query]]),
+            [
+              ['q', query],
+              ['type_not', 'novel'],
+            ].concat(
+              ['safe', 'suggestive', 'erotica', 'pornographic'].map(r => ['content_rating', r]),
+            ),
           ),
         {
           headers: {

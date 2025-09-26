@@ -1,25 +1,23 @@
 <script setup lang="ts">
 import EntryCard from '@/components/EntryCard.vue'
-import FormSearch from '@/components/FormSearch.vue'
 import FormURL from '@/components/FormURL.vue'
 import ModalDialog from '@/components/ModalDialog.vue'
-import NavTab from '@/components/NavTab.vue'
 import { bsTooltips } from '@/main'
-import { MangaInfo, type FormTabs, type ParserOptions } from '@/types'
+import { MangaInfo, type ParserOptions } from '@/types'
 import { onMounted, ref } from 'vue'
+import FormSearch from './components/FormSearch.vue'
+import NavTab from './components/NavTab.vue'
 
 const DEV = import.meta.env.DEV
 
 const mangaEntries = ref<MangaInfo[]>([])
 const xml = ref('')
-const activeTab = ref<FormTabs>('URL')
+const activeTab = ref<'url' | 'search' | 'file'>('search')
 onMounted(() => bsTooltips().create())
 const options = ref({
   url: DEV ? 'https://mangabaka.dev/84926' : '',
   parserParams: { english: true, proxy: false } as ParserOptions,
 })
-
-const tabs = { URL: FormURL, Search: FormSearch, File: FormURL }
 </script>
 
 <template>
@@ -28,18 +26,24 @@ const tabs = { URL: FormURL, Search: FormSearch, File: FormURL }
   </TransitionGroup>
 
   <ul id="nav-bar" class="nav nav-tabs mt-2">
-    <NavTab v-for="(_, name) in tabs" :key="name" :tab-name="name" v-model:active-tab="activeTab">
-      {{ name }}
-    </NavTab>
+    <NavTab v-model:active-tab="activeTab" tab-name="search">Search</NavTab>
+    <NavTab v-model:active-tab="activeTab" tab-name="url">URL</NavTab>
+    <NavTab v-model:active-tab="activeTab" tab-name="file">File</NavTab>
   </ul>
 
   <div class="mb-3 border rounded-bottom p-2">
-    <component
-      :is="tabs[activeTab]"
+    <FormSearch
+      v-if="activeTab == 'search'"
       :DEV
       v-model:options="options"
       v-model:manga-entries="mangaEntries"
-    ></component>
+    />
+    <FormURL
+      v-if="activeTab == 'url'"
+      :DEV
+      v-model:options="options"
+      v-model:manga-entries="mangaEntries"
+    />
   </div>
 
   <TransitionGroup name="fade-down">

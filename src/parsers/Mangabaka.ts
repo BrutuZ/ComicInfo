@@ -110,8 +110,10 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           ? page.title || page.romanized_title
           : page.romanized_title || page.title) || page.native_title,
       genre: [
-        ...(page.genres || []).map(g => capitalizeTags(g)).sort(),
-        ...(page.tags || []).sort(),
+        ...(page.genres || [])
+          .sort()
+          .map(g => (options.groupTags ? 'Genre:' : '') + capitalizeTags(g)),
+        ...(page.tags || []).sort().map(t => (options.groupTags ? 'Tag:' : '') + t),
       ],
       artist: page.artists,
       author: page.authors,

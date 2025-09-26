@@ -209,6 +209,16 @@ const addItem = () => {
             v-model="options.parserParams.english"
           />
         </div>
+        <div id="group-pref" class="form-check form-switch">
+          <label for="grouping" class="form-check-label">Group Genres</label>
+          <input
+            id="grouping"
+            type="checkbox"
+            class="form-check-input"
+            role="switch"
+            v-model="options.parserParams.groupTags"
+          />
+        </div>
         <div v-if="DEV" id="proxy-pref" class="form-check form-switch">
           <label for="proxy-switch" class="form-check-label">Proxy Requests</label>
           <input

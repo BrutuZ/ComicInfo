@@ -123,6 +123,7 @@ export interface SearchResult {
 export interface ParserOptions {
   english?: boolean
   proxy?: boolean
+  groupTags?: boolean
 }
 
 export interface SourceInfo {

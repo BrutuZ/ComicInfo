@@ -130,7 +130,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       descriptionHeader.push(
         '★'.repeat(stars) +
           '☆'.repeat(5 - stars) +
-          ` ${(page.rating < 10 ? page.rating * 10 : page.rating).toFixed(1)}`,
+          ` ${(page.rating < 10 ? page.rating : page.rating / 10).toFixed(1)}`,
       )
     }
     if (page.is_licensed) descriptionHeader.push('💱')

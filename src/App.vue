@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import EntryCard from '@/components/EntryCard.vue'
+import FormSearch from '@/components/FormSearch.vue'
 import FormURL from '@/components/FormURL.vue'
 import ModalDialog from '@/components/ModalDialog.vue'
+import NavTab from '@/components/NavTab.vue'
+import SettingsPanel from '@/components/SettingsPanel.vue'
 import { bsTooltips } from '@/main'
 import { MangaInfo, type ParserOptions } from '@/types'
 import { onMounted, ref } from 'vue'
-import FormSearch from './components/FormSearch.vue'
-import NavTab from './components/NavTab.vue'
 
 const DEV = import.meta.env.DEV
 
@@ -16,7 +17,7 @@ const activeTab = ref<'url' | 'search' | 'file'>('search')
 onMounted(() => bsTooltips().create())
 const options = ref({
   url: DEV ? 'https://mangabaka.dev/84926' : '',
-  parserParams: { english: true, proxy: false } as ParserOptions,
+  parserParams: { english: true, groupTags: true, proxy: false } as ParserOptions,
 })
 </script>
 
@@ -32,6 +33,7 @@ const options = ref({
   </ul>
 
   <div class="mb-3 border rounded-bottom p-2">
+    <SettingsPanel v-model:options="options" :DEV />
     <FormSearch
       v-if="activeTab == 'search'"
       :DEV

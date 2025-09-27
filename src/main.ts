@@ -17,18 +17,18 @@ declare global {
 
 export const blankLine = '\u00a0\n' // Because Mihon's Markdown parser is stupid
 
-export function stringToList(value: string | undefined) {
+export function stringToList(value: string | undefined | null) {
   return (value || '')
     .split(/ *, */)
-    .map(item => stripCounter(item))
+    .map(item => stripCounter(item).trim())
     .filter(item => item)
 }
 
-export function stripCounter(text: string | undefined) {
+export function stripCounter(text: string | undefined | null) {
   return text ? text.trim().replace(/ [\d,()]+$/, '') : ''
 }
 
-export function stripHtmlTags(text?: string) {
+export function stripHtmlTags(text: string | undefined | null) {
   const div = document.createElement('div')
   div.innerHTML = text || ''
   return (div.textContent || div.innerText || '').replace(/^\n/gm, blankLine)

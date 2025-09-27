@@ -47,28 +47,31 @@ export function HNexus(url: string = '', options: ParserOptions = { proxy: true 
       if (page instanceof MangaInfo) return [{ error: page.error } as MangaInfo]
 
       const data = new MangaInfo({ source: source, status: 'Completed' })
-      data.title = page.querySelector('.title')?.textContent.trim() || ''
+      data.title = (page.querySelector('.title')?.textContent || '').trim()
       data.genre = [
-        ...Array.from(page.querySelectorAll('.tag')).map(tag => stripCounter(tag.textContent)),
+        ...(Array.from(page.querySelectorAll('.tag'))?.map(tag => stripCounter(tag.textContent)) ||
+          []),
         'hentai',
       ]
-      const cover = page.querySelector('figure.image>img') as HTMLImageElement | undefined
+      const cover = page.querySelector('figure.image>img') as HTMLImageElement | null
       if (cover) data.cover = cover.src
       page.querySelectorAll('td.viewcolumn').forEach(el => {
-        const field = el.textContent.trim()
+        const field = (el.textContent || '').trim()
         const value = el.parentElement?.querySelector('td+td')
         switch (field) {
           case 'Published':
-            data.date = dateToString(value ? new Date(value?.textContent.trim()) : new Date())
+            data.date = dateToString(
+              value ? new Date((value?.textContent || '').trim()) : new Date(),
+            )
             break
           case 'Description':
             data.description = stripHtmlTags(value?.innerHTML).trim()
             break
           case 'Artist':
-            data.artist = stringToList(value?.textContent.trim())
+            data.artist = stringToList(value?.textContent)
             break
           case 'Circle':
-            data.author = stringToList(value?.textContent.trim())
+            data.author = stringToList(value?.textContent)
           case 'Pages':
           case 'Parody':
           case 'Publisher':

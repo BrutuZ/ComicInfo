@@ -5,9 +5,6 @@ import { MangaInfo, type ParserOptions, type SearchResult } from '@/types'
 import { ref } from 'vue'
 
 const mangaEntries = defineModel<MangaInfo[]>('mangaEntries', { default: [] })
-defineProps<{
-  DEV: boolean
-}>()
 const options = defineModel<{ url: string; parserParams: ParserOptions }>('options', {
   required: true,
 })

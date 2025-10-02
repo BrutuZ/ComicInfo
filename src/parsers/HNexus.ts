@@ -1,4 +1,4 @@
-import { dateToString, stringToList, stripCounter, stripHtmlTags } from '@/main'
+import { dateToString, DEV, stringToList, stripCounter, stripHtmlTags } from '@/main'
 import { MangaInfo, type Parser, type ParserOptions } from '@/types'
 
 export function HNexus(url: string = '', options: ParserOptions = { proxy: true }): Parser {

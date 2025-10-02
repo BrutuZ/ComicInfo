@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import type { ParserOptions } from '@/types'
 
-defineProps<{
-  DEV: boolean
-}>()
 const options = defineModel<{ url: string; parserParams: ParserOptions }>('options', {
   required: true,
 })
@@ -31,6 +28,7 @@ const options = defineModel<{ url: string; parserParams: ParserOptions }>('optio
         v-model="options.parserParams.groupTags"
       />
     </div>
+    <!--
     <div v-if="DEV" id="proxy-pref" class="form-check form-switch">
       <label for="proxy-switch" class="form-check-label">Proxy Requests</label>
       <input
@@ -41,5 +39,6 @@ const options = defineModel<{ url: string; parserParams: ParserOptions }>('optio
         v-model="options.parserParams.proxy"
       />
     </div>
+     -->
   </span>
 </template>

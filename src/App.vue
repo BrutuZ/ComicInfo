@@ -5,11 +5,9 @@ import FormURL from '@/components/FormURL.vue'
 import ModalDialog from '@/components/ModalDialog.vue'
 import NavTab from '@/components/NavTab.vue'
 import SettingsPanel from '@/components/SettingsPanel.vue'
-import { bsTooltips } from '@/main'
+import { bsTooltips, DEV } from '@/main'
 import { MangaInfo, type ParserOptions } from '@/types'
 import { onMounted, ref } from 'vue'
-
-const DEV = import.meta.env.DEV
 
 const mangaEntries = ref<MangaInfo[]>([])
 const xml = ref('')
@@ -33,16 +31,14 @@ const options = ref({
   </ul>
 
   <div class="mb-3 border rounded-bottom p-2">
-    <SettingsPanel v-model:options="options" :DEV />
+    <SettingsPanel v-model:options="options" />
     <FormSearch
       v-if="activeTab == 'search'"
-      :DEV
       v-model:options="options"
       v-model:manga-entries="mangaEntries"
     />
     <FormURL
       v-if="activeTab == 'url'"
-      :DEV
       v-model:options="options"
       v-model:manga-entries="mangaEntries"
     />

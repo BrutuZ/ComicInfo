@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SourceIcon from '@/components/SourceIcon.vue'
+import { DEV } from '@/main'
 import { AniList } from '@/parsers/Anilist'
 import { HNexus } from '@/parsers/HNexus'
 import { MangaBaka } from '@/parsers/Mangabaka'
@@ -7,9 +8,6 @@ import { MangaInfo, type ParserOptions } from '@/types'
 import { ref } from 'vue'
 
 const mangaEntries = defineModel<MangaInfo[]>('mangaEntries', { default: [] })
-defineProps<{
-  DEV: boolean
-}>()
 const options = defineModel<{ url: string; parserParams: ParserOptions }>('options', {
   required: true,
 })
@@ -89,6 +87,10 @@ Alternative Titles:
       // }),
     ]
 
+const showButton = () => {
+  if (DEV) return false
+  return !options.value.url
+}
 // ^^^ tree-shaking should get rid of this ^^^
 const validateForm = (urlInput: string | Event | undefined) => {
   if (urlInput === undefined) return urlInput
@@ -169,7 +171,7 @@ const addItem = () => {
           id="button-add"
           title="Add Links(s)"
           @click="addItem"
-          :disabled="!DEV && !options.url"
+          :disabled="showButton()"
         >
           +
         </button>

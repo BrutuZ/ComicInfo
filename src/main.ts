@@ -11,10 +11,6 @@ import './styles.scss'
 // or, specify which plugins you need:
 // import { Tooltip, Toast, Popover } from 'bootstrap';
 
-declare global {
-  let DEV: boolean
-}
-
 export const blankLine = '\u00a0\n' // Because Mihon's Markdown parser is stupid
 
 export function stringToList(value: string | undefined | null) {

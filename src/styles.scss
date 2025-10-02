@@ -12,9 +12,9 @@ $card-spacer-x: $spacer * 0.75;
 
 @import 'bootstrap/scss/bootstrap.scss';
 
-// Update the import directory to point to it's location within node_modules
-$bootstrap-icons-font-dir: 'bootstrap-icons/font/fonts';
-// Import the Sass files as usual
-@import 'bootstrap-icons/font/bootstrap-icons';
+// // Update the import directory to point to it's location within node_modules
+// $bootstrap-icons-font-dir: 'bootstrap-icons/font/fonts';
+// // Import the Sass files as usual
+// @import 'bootstrap-icons/font/bootstrap-icons';
 
 // Then add additional custom code here

@@ -4,7 +4,7 @@ import { createApp } from 'vue'
 
 // Import our custom CSS
 import { Tooltip } from 'bootstrap'
-import './styles.scss'
+import './scss/styles.scss'
 
 // import Alert from 'bootstrap/js/dist/alert';
 

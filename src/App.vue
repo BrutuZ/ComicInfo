@@ -53,10 +53,3 @@ const options = ref({
     />
   </TransitionGroup>
 </template>
-
-<style lang="scss">
-// ul.nav {
-//   --bs-nav-link-color: var(--bs-success);
-//   --bs-nav-link-hover-color: var(--bs-success-text-emphasis);
-// }
-</style>

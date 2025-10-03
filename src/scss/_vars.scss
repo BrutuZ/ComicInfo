@@ -1,0 +1,15 @@
+@import 'bootstrap/scss/functions';
+
+$enable-shadows: true;
+$enable-gradients: true;
+$enable-validation-icons: false;
+$prefix: ci-;
+
+$primary: #198754;
+
+$nav-link-color: $primary;
+$nav-link-hover-color: #20c997;
+$card-spacer-x: 1rem * 0.75;
+
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';

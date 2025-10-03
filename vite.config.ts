@@ -3,14 +3,17 @@ import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { defineConfig } from 'vite'
+import { viteExternalsPlugin } from 'vite-plugin-externals'
 // import vueDevTools from 'vite-plugin-vue-devtools'
 
+const isDev = process.env.NODE_ENV != 'production'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
     //  vueDevTools()
+    viteExternalsPlugin({ xmlbuilder2: 'xmlbuilder2' }),
   ],
   resolve: {
     alias: {
@@ -22,8 +25,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         silenceDeprecations: ['import', 'color-functions', 'global-builtin'],
-        additionalData: `@import "bootstrap/scss/bootstrap.scss";`,
-        // additionalData: `@import "bootstrap/scss/_functions.scss";@import "bootstrap/scss/_variables.scss";`,
+        additionalData: `@import "@/scss/_vars.scss";`,
       },
     },
   },
@@ -31,7 +33,7 @@ export default defineConfig({
     port: 5001,
   },
   build: {
-    minify: process.env.NODE_ENV == 'production',
+    minify: !isDev,
   },
   esbuild: {
     treeShaking: true,

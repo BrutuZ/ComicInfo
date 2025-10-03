@@ -9,6 +9,7 @@ import { viteExternalsPlugin } from 'vite-plugin-externals'
 const isDev = process.env.NODE_ENV != 'production'
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/ComicInfo/',
   plugins: [
     vue(),
     vueJsx(),

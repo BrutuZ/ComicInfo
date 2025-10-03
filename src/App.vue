@@ -27,7 +27,7 @@ const options = ref({
   <ul id="nav-bar" class="nav nav-tabs mt-2">
     <NavTab v-model:active-tab="activeTab" tab-name="search">Search</NavTab>
     <NavTab v-model:active-tab="activeTab" tab-name="url">URL</NavTab>
-    <NavTab v-model:active-tab="activeTab" tab-name="file">File</NavTab>
+    <NavTab v-model:active-tab="activeTab" tab-name="file" disabled>File</NavTab>
   </ul>
 
   <div class="mb-3 border rounded-bottom p-2">

@@ -9,7 +9,7 @@ const props = defineProps<{ source: SourceInfo }>()
     <img
       class="source-icons"
       :title="props.source.name"
-      :src="`/assets/${props.source.icon}`"
+      :src="`./assets/${props.source.icon}`"
       data-bs-toggle="tooltip"
       data-bs-placement="bottom"
     />

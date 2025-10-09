@@ -34,13 +34,13 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       if (!urlRE)
         if (!DEV)
           return new Promise(() => {
-            return { error: 'Invalid URL' }
+            return new MangaInfo({ error: 'Invalid URL' })
           })
 
       const page = await fetch(
         DEV
           ? urlRE.id
-            ? `${apiUrl}/v1/series/${urlRE.id}`
+            ? `${apiUrl}/v1/series/${urlRE.id}/full`
             : 'src/dev/mangabaka.json'
           : `${apiUrl}/v1/series/${urlRE.id}/full`,
         {
@@ -57,12 +57,12 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
               typeof v == 'string' ? replaceSmartQuotes(v) : v,
             ) as Promise<MangaResponse>,
         )
-        .then(parsed => parsed.data || { error: parsed.message })
+        .then(parsed => parsed.data || { error: String(parsed.message) })
         .catch(e => {
           console.error(e)
           return { error: String(e) }
         })
-      if ('error' in page) return [page as MangaInfo]
+      if ('error' in page) return [new MangaInfo(page)]
 
       return [buildInfo(page)]
     },

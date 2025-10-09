@@ -15,7 +15,7 @@ export class MangaInfo {
   dateObj: Date
   source?: SourceInfo
   publisher: string = ''
-  uuid: string = crypto.randomUUID()
+  uuid: string = crypto.getRandomValues(new Uint32Array(1))[0].toString()
   error?: string
 
   constructor({
@@ -31,7 +31,8 @@ export class MangaInfo {
     // dateObj = new Date(),
     source = { name: 'Unknown' } as SourceInfo,
     publisher = '',
-    uuid = crypto.randomUUID(),
+    uuid = crypto.getRandomValues(new Uint32Array(1))[0].toString(),
+    error = '',
   } = {}) {
     this.title = title
     this.description = description
@@ -54,6 +55,7 @@ export class MangaInfo {
     // }
     this.publisher = publisher
     this.uuid = uuid
+    this.error = error
   }
 
   get date(): string {

@@ -1,39 +1,13 @@
-# vue-tutorial
+# ![Icon](public/apple-touch-icon.png) ComicInfo Generator
 
-This template should help get you started developing with Vue 3 in Vite.
+Page for generating `ComicInfo.xml` files for manga entries to be used with Mihon, its forks or Self-Hosting servers.
 
-## Recommended IDE Setup
+The user can search for entries (powered by [MangaBaka](https://mangabaka.dev)) or directly input URLs from supported sites, which will create "cards" that can be individually edited and exported.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+---
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+<p align="center">Wow<br/>
+<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F46%2Fef%2Fb6%2F46efb6b132359fffe2b27a2afad41aec.png&f=1&nofb=1&h=96" alt="doge"><br/>
+Much alpha<br/>
+Such bugs
+</p>

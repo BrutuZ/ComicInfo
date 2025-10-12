@@ -126,14 +126,14 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
     const description = []
     const descriptionHeader = []
     if (page.rating) {
-      const stars = Number((page.rating / (page.rating < 10 ? 2 : 20)).toFixed())
+      const stars = Math.min(Number((page.rating / (page.rating < 10 ? 2 : 20)).toFixed()), 5)
       descriptionHeader.push(
         '★'.repeat(stars) +
           '☆'.repeat(5 - stars) +
           ` ${(page.rating < 10 ? page.rating : page.rating / 10).toFixed(1)}`,
       )
     }
-    if (page.is_licensed) descriptionHeader.push('💱')
+    if (page.is_licensed) descriptionHeader.push('💱 Licensed')
     if (page.has_anime)
       descriptionHeader.push(
         '📺' +

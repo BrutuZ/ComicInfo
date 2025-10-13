@@ -96,7 +96,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           console.error(e)
           return { error: String(e) }
         })
-      if ('error' in page) return [page as MangaInfo]
+      if ('error' in page) throw new Error(page.error)
 
       return page.map(parsed => Object({ parsed: buildInfo(parsed), raw: parsed }))
     },

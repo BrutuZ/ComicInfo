@@ -8,6 +8,7 @@ const mangaEntries = defineModel<MangaInfo[]>('mangaEntries', { default: [] })
 const options = defineModel<{ url: string; parserParams: ParserOptions }>('options', {
   required: true,
 })
+const errorMsg = defineModel('errorMsg')
 const query = ref('')
 const searching = ref(false)
 const results = ref<SearchResult[]>([])
@@ -24,6 +25,7 @@ const search = () => {
     .then(sr => {
       results.value = sr
     })
+    .catch(e => (errorMsg.value = e))
     .finally(() => (searching.value = false))
 }
 

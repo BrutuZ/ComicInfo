@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BSAlert from '@/components/BSAlert.vue'
 import EntryCard from '@/components/EntryCard.vue'
 import FormSearch from '@/components/FormSearch.vue'
 import FormURL from '@/components/FormURL.vue'
@@ -9,6 +10,7 @@ import { bsTooltips, DEV } from '@/main'
 import { MangaInfo, type ParserOptions } from '@/types'
 import { onMounted, ref } from 'vue'
 
+const errorMsg = ref()
 const mangaEntries = ref<MangaInfo[]>([])
 const xml = ref('')
 const activeTab = ref<'url' | 'search' | 'file'>('search')
@@ -21,6 +23,10 @@ const options = ref({
 
 <template>
   <TransitionGroup name="fade-down">
+    <BSAlert v-if="errorMsg" v-model="errorMsg" :duration="1500">
+      <i class="bi bi-x-circle-fill" role="img" aria-label="Error:"></i>
+      {{ errorMsg }}
+    </BSAlert>
     <ModalDialog v-if="xml" v-model:xml="xml" />
   </TransitionGroup>
 
@@ -36,11 +42,13 @@ const options = ref({
       v-if="activeTab == 'search'"
       v-model:options="options"
       v-model:manga-entries="mangaEntries"
+      :errorMsg
     />
     <FormURL
       v-if="activeTab == 'url'"
       v-model:options="options"
       v-model:manga-entries="mangaEntries"
+      :errorMsg
     />
   </div>
 

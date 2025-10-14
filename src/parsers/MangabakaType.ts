@@ -73,6 +73,9 @@ export interface SeriesData {
     raw?: string
     default?: string
     small?: string
+    x150?: CoverSet
+    x250?: CoverSet
+    x350?: CoverSet
     [k: string]: unknown
   }
   /**
@@ -1320,4 +1323,10 @@ export interface SourceShikimori {
     [k: string]: unknown
   }
   [k: string]: unknown
+}
+
+interface CoverSet {
+  x1?: string
+  x2?: string
+  x3?: string
 }

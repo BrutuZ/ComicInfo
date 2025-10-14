@@ -80,7 +80,15 @@ const addResult = (manga: MangaInfo) => {
         class="dropdown-item d-flex"
         @click="addResult(manga.parsed)"
       >
-        <img :src="manga.raw.cover.small || manga.raw.cover.default" class="p-2" />
+        <img
+          :srcset="
+            manga.raw.cover.x150 &&
+            Object.entries(manga.raw.cover.x150)
+              .map(x => `${x[1]} ${x[0]}`)
+              .join()
+          "
+          class="p-2"
+        />
         <span>
           [{{ manga.raw.year }}] {{ manga.raw.title }}
           <br />

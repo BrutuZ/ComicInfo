@@ -151,7 +151,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         page.title,
         page.romanized_title,
         page.native_title,
-        ...Object.values(page.secondary_titles).flatMap(o => o.map(e => e.title)),
+        ...Object.values(page.secondary_titles).flatMap(o => o?.map(e => e.title)),
       ]),
     ].filter(t => t != info.title)
     if (altTitles.length > 0) {

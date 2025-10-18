@@ -42,13 +42,13 @@ const options = ref({
       v-if="activeTab == 'search'"
       v-model:options="options"
       v-model:manga-entries="mangaEntries"
-      :errorMsg
+      v-model:error-msg="errorMsg"
     />
     <FormURL
       v-if="activeTab == 'url'"
       v-model:options="options"
       v-model:manga-entries="mangaEntries"
-      :errorMsg
+      v-model:error-msg="errorMsg"
     />
   </div>
 

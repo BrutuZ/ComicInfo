@@ -81,6 +81,7 @@ const addResult = (manga: MangaInfo) => {
         @click="addResult(manga.parsed)"
       >
         <img
+          :src="manga.raw.cover.x150?.x1"
           :srcset="
             manga.raw.cover.x150 &&
             Object.entries(manga.raw.cover.x150)

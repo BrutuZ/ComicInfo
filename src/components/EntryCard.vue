@@ -28,8 +28,14 @@ onMounted(() => {
   <div class="card mb-3" :id="'card-' + manga.uuid">
     <div class="row g-0">
       <div v-if="manga.source" class="card-header text-center">
-        <img v-if="manga.source.icon" :src="`./assets/${manga.source.icon}`" class="source-icons" />
-        {{ manga.source.name }}
+        <a :href="manga.url?.split(' ').slice(-1)[0]">
+          <img
+            v-if="manga.source.icon"
+            :src="`./assets/${manga.source.icon}`"
+            class="source-icons"
+          />
+          {{ manga.source.name }}
+        </a>
       </div>
       <div v-if="manga.cover" class="col-md-4 p-2 align-self-center text-center cover-container">
         <span v-if="!coverLoaded" class="align-items-center d-inline-flex flex-column h-50 w-100">
@@ -102,5 +108,9 @@ onMounted(() => {
 
 .tag-badge {
   cursor: pointer;
+}
+
+.card-header > a {
+  text-decoration: none;
 }
 </style>

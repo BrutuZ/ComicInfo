@@ -247,11 +247,10 @@ export interface SecondaryTitle {
 interface SourceSimple {
   id: number
   rating: number
+  // [k: string]: unknown
 }
 
-export interface SourceAnilist {
-  id: number
-  rating: number
+export interface SourceAnilist extends SourceSimple {
   cover: string
   last_updated_at: string
   response: {

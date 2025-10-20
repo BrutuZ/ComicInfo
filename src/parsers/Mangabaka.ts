@@ -1,5 +1,10 @@
 import { blankLine, capitalizeTags, DEV, replaceSmartQuotes, stripHtmlTags } from '@/main'
-import type { MangaResponse, SearchResponse, SeriesData } from '@/parsers/MangabakaType'
+import type {
+  MangaResponse,
+  SearchResponse,
+  SeriesData,
+  SourceAnilist,
+} from '@/parsers/MangabakaType'
 import { MangaInfo, type ParserOptions, type Searcher, type TachiStatus } from '@/types'
 
 const statusMap = {
@@ -162,6 +167,10 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
     info.description = description.join(blankLine)
 
     if (page.year) info.date = `${page.year}-01-01`
+    if ((page.source.anilist as SourceAnilist).response?.startDate.year) {
+      const sd = (page.source.anilist as SourceAnilist).response.startDate
+      info.date = `${sd.year}-${sd.month || '01'}-${sd.day || '01'}`
+    }
     return info
   }
 }

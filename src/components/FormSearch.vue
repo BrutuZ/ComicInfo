@@ -29,10 +29,12 @@ const search = () => {
     .finally(() => (searching.value = false))
 }
 
-const addResult = (manga: MangaInfo) => {
+const addResult = (manga: SearchResult) => {
   showResults.value = false
-  mangaEntries.value.unshift(manga)
-  results.value = results.value.filter(e => e.parsed.uuid != manga.uuid)
+  searchers[0](manga.raw.links?.slice(-1)[0])
+    .parse()
+    .then(entry => mangaEntries.value.unshift(entry[0]))
+  results.value = results.value.filter(e => e.parsed.uuid != manga.parsed.uuid)
 }
 </script>
 
@@ -78,7 +80,7 @@ const addResult = (manga: MangaInfo) => {
         v-for="manga in results"
         :key="manga.parsed.uuid"
         class="dropdown-item d-flex"
-        @click="addResult(manga.parsed)"
+        @click="addResult(manga)"
       >
         <img
           :src="manga.raw.cover.x150?.x1"

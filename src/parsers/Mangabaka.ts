@@ -133,7 +133,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           ` ${(page.rating < 10 ? page.rating : page.rating / 10).toFixed(1)}`,
       )
     }
-    if (page.is_licensed) descriptionHeader.push('💱 Licensed')
+    if (page.is_licensed && options.showLicensed) descriptionHeader.push('💱 Licensed')
     if (page.has_anime)
       descriptionHeader.push(
         '📺' +
@@ -141,7 +141,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           (page.anime?.end ? `To: ${page.anime.end}` : page.anime?.start ? '?' : ''),
       )
     if (descriptionHeader.length > 0) {
-      description.push(descriptionHeader.join(' ') + '\n')
+      description.push(descriptionHeader.join(' | ') + '\n')
     }
 
     if (page.description) description.push(stripHtmlTags(page.description))

@@ -126,6 +126,8 @@ export interface ParserOptions {
   english?: boolean
   proxy?: boolean
   groupTags?: boolean
+  showLicensed?: boolean
+  [k: string]: boolean | undefined
 }
 
 export interface SourceInfo {

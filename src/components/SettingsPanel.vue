@@ -28,6 +28,16 @@ const options = defineModel<{ url: string; parserParams: ParserOptions }>('optio
         v-model="options.parserParams.groupTags"
       />
     </div>
+    <div class="form-check form-switch">
+      <label for="licensed" class="form-check-label">Show Licensed Status</label>
+      <input
+        id="licensed"
+        type="checkbox"
+        class="form-check-input"
+        role="switch"
+        v-model="options.parserParams.showLicensed"
+      />
+    </div>
     <!--
     <div v-if="DEV" id="proxy-pref" class="form-check form-switch">
       <label for="proxy-switch" class="form-check-label">Proxy Requests</label>

@@ -4,18 +4,13 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { defineConfig } from 'vite'
 import { viteExternalsPlugin } from 'vite-plugin-externals'
-// import vueDevTools from 'vite-plugin-vue-devtools'
+import vueDevTools from 'vite-plugin-vue-devtools'
 
 const isDev = process.env.NODE_ENV != 'production'
 // https://vite.dev/config/
 export default defineConfig({
   base: isDev ? '' : '/ComicInfo/',
-  plugins: [
-    vue(),
-    vueJsx(),
-    //  vueDevTools()
-    viteExternalsPlugin({ xmlbuilder2: 'xmlbuilder2' }),
-  ],
+  plugins: [vue(), vueJsx(), vueDevTools(), viteExternalsPlugin({ xmlbuilder2: 'xmlbuilder2' })],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

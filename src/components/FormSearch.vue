@@ -31,7 +31,7 @@ const search = () => {
 
 const addResult = (manga: SearchResult) => {
   showResults.value = false
-  searchers[0](manga.raw.links?.slice(-1)[0])
+  searchers[0](manga.raw.links?.slice(-1)[0], options.value.parserParams)
     .parse()
     .then(entry => mangaEntries.value.unshift(entry[0]))
   results.value = results.value.filter(e => e.parsed.uuid != manga.parsed.uuid)

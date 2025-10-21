@@ -15,6 +15,7 @@ const options = defineModel<{ url: string; parserParams: ParserOptions }>('optio
         type="checkbox"
         class="form-check-input"
         role="switch"
+        checked="true"
         v-model="options.parserParams.english"
       />
     </div>
@@ -25,6 +26,7 @@ const options = defineModel<{ url: string; parserParams: ParserOptions }>('optio
         type="checkbox"
         class="form-check-input"
         role="switch"
+        checked="true"
         v-model="options.parserParams.groupTags"
       />
     </div>
@@ -35,6 +37,7 @@ const options = defineModel<{ url: string; parserParams: ParserOptions }>('optio
         type="checkbox"
         class="form-check-input"
         role="switch"
+        checked="true"
         v-model="options.parserParams.showLicensed"
       />
     </div>

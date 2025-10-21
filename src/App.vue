@@ -17,7 +17,7 @@ const activeTab = ref<'url' | 'search' | 'file'>('search')
 onMounted(() => bsTooltips().create())
 const options = ref({
   url: DEV ? 'https://mangabaka.dev/84926' : '',
-  parserParams: { english: true, groupTags: true, proxy: false } as ParserOptions,
+  parserParams: { proxy: false } as ParserOptions,
 })
 </script>
 

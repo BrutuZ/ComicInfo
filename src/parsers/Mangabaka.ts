@@ -16,6 +16,8 @@ const statusMap = {
   upcoming: 'Unknown',
 }
 
+const animeRE = /Vol(ume|\.)? \d+, Ch(\.|ap(ter)?) /
+
 export function MangaBaka(): Searcher
 export function MangaBaka(url?: string, options?: ParserOptions): Searcher
 export function MangaBaka(url: string = '', options: ParserOptions = {}): Searcher {
@@ -139,12 +141,19 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       )
     }
     if (page.is_licensed && options.showLicensed) descriptionHeader.push('💱 Licensed')
-    if (page.has_anime)
-      descriptionHeader.push(
-        '📺' +
-          (page.anime?.start ? ` From: ${page.anime.start} ` : '') +
-          (page.anime?.end ? `To: ${page.anime.end}` : page.anime?.start ? '?' : ''),
-      )
+    if (page.has_anime) {
+      const animeEps: string[] = []
+      page.anime.start
+        .split('/')
+        .forEach((season, index) =>
+          animeEps.push(
+            season.replace(animeRE, 'Ch.').trim() +
+              '-' +
+              (page.anime.end?.split('/')[index]?.replace(animeRE, '').trim() || '?'),
+          ),
+        )
+      descriptionHeader.push('📺' + animeEps.join(', '))
+    }
     if (descriptionHeader.length > 0) {
       description.push(descriptionHeader.join(' | ') + '\n')
     }

@@ -59,7 +59,7 @@ export function buildXML(manga: MangaInfo) {
 
 <template>
   <div class="modal" id="outputModal" aria-labelledby="outputModalLabel">
-    <BSAlert v-if="alertRef" v-model="alertRef" :duration="1500">
+    <BSAlert v-if="alertRef" v-model="alertRef" :style="'info'">
       <i class="bi bi-info" role="img" aria-label="Info:"></i>
       XML Copied to clipboard
     </BSAlert>

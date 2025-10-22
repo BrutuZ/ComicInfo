@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { Alert } from 'bootstrap'
-import { onMounted } from 'vue'
+import { onMounted, type PropType } from 'vue'
 
-const props = withDefaults(defineProps<{ duration: number }>(), { duration: 1500 })
+type alertStyles = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
+const props = defineProps({
+  duration: { type: Number, default: 3000 },
+  style: { type: String as PropType<alertStyles>, default: 'primary' },
+})
 const alertRef = defineModel<boolean | { element: Element; alert: Alert }>()
 
 onMounted(() => {
@@ -23,7 +27,7 @@ setTimeout(() => {
 <template>
   <TransitionGroup name="fade-down">
     <div
-      class="alert alert-success fixed-top align-items-center"
+      :class="`alert alert-${props.style} fixed-top align-items-center`"
       role="alert"
       style="z-index: 65535"
     >

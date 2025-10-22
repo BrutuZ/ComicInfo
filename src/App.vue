@@ -6,7 +6,7 @@ import FormURL from '@/components/FormURL.vue'
 import ModalDialog from '@/components/ModalDialog.vue'
 import NavTab from '@/components/NavTab.vue'
 import SettingsPanel from '@/components/SettingsPanel.vue'
-import { bsTooltips, DEV } from '@/main'
+import { bsTooltips } from '@/main'
 import { MangaInfo, type ParserOptions } from '@/types'
 import { onMounted, ref } from 'vue'
 
@@ -28,7 +28,7 @@ const options = ref({
 
 <template>
   <TransitionGroup name="fade-down">
-    <BSAlert v-if="errorMsg" v-model="errorMsg" :duration="1500">
+    <BSAlert v-if="errorMsg" v-model="errorMsg" :duration="7000" :style="'danger'">
       <i class="bi bi-x-circle-fill" role="img" aria-label="Error:"></i>
       {{ errorMsg }}
     </BSAlert>

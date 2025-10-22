@@ -71,8 +71,6 @@ export interface SeriesData {
    */
   cover: {
     raw?: string
-    default?: string
-    small?: string
     x150?: CoverSet
     x250?: CoverSet
     x350?: CoverSet
@@ -473,9 +471,7 @@ export interface SourceAnilist extends SourceSimple {
   [k: string]: unknown
 }
 
-export interface SourceANN {
-  id: number
-  rating: number
+export interface SourceANN extends SourceSimple {
   cover: string
   last_updated_at: string
   response: {
@@ -577,9 +573,7 @@ export interface SourceANN {
   [k: string]: unknown
 }
 
-export interface SourceMangaUpdates {
-  id: string
-  rating: number
+export interface SourceMangaUpdates extends SourceSimple {
   cover: string
   last_updated_at: string
   response: {
@@ -756,9 +750,7 @@ export interface SourceMangaUpdates {
   [k: string]: unknown
 }
 
-export interface SourceMal {
-  id: number
-  rating: number
+export interface SourceMal extends SourceSimple {
   cover: string
   last_updated_at: string
   response: {
@@ -886,9 +878,7 @@ export interface SourceMal {
   [k: string]: unknown
 }
 
-export interface SourceKitsu {
-  id: number
-  rating: number
+export interface SourceKitsu extends SourceSimple {
   cover: string
   last_updated_at: string
   response: {
@@ -1050,9 +1040,7 @@ export interface SourceKitsu {
   [k: string]: unknown
 }
 
-export interface SourceShikimori {
-  id: number
-  rating: number
+export interface SourceShikimori extends SourceSimple {
   cover: string
   last_updated_at: string
   response: {

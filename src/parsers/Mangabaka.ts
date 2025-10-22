@@ -124,7 +124,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       ],
       artist: page.artists,
       author: page.authors,
-      cover: page.cover.raw || page.cover.default,
+      cover: page.cover.raw || page.cover.x350?.x1,
       status: statusMap[page.status] as TachiStatus,
       publisher: page.publishers?.map(p => p.name).join(', '),
       description: page.description,

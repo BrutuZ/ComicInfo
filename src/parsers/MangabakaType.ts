@@ -70,7 +70,15 @@ export interface SeriesData {
    * The primary cover image for the series. You may hotlink to the non-raw image in your application.
    */
   cover: {
-    raw?: string
+    raw?: {
+      url: string
+      size?: number
+      height?: number
+      width?: number
+      blurhash?: string
+      thumbhash?: string
+      format?: string
+    }
     x150?: CoverSet
     x250?: CoverSet
     x350?: CoverSet

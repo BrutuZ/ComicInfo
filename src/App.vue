@@ -28,11 +28,11 @@ const options = ref({
 
 <template>
   <TransitionGroup name="fade-down">
-    <BSAlert v-if="errorMsg" v-model="errorMsg" :duration="7000" :style="'danger'">
+    <BSAlert v-if="errorMsg" :duration="7000" :alertStyle="'danger'" :key="'alert'">
       <i class="bi bi-x-circle-fill" role="img" aria-label="Error:"></i>
       {{ errorMsg }}
     </BSAlert>
-    <ModalDialog v-if="xml" v-model:xml="xml" />
+    <ModalDialog v-if="xml" v-model:xml="xml" :key="'modal'" />
   </TransitionGroup>
 
   <ul id="nav-bar" class="nav nav-tabs mt-2">

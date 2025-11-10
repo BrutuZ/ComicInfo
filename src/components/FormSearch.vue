@@ -3,6 +3,7 @@ import { capitalizeTags, unique } from '@/main'
 import { MangaBaka } from '@/parsers/Mangabaka'
 import { MangaInfo, type ParserOptions, type SearchResult } from '@/types'
 import { ref } from 'vue'
+import ThumbHash from './ThumbHash.vue'
 
 const mangaEntries = defineModel<MangaInfo[]>('mangaEntries', { default: [] })
 const options = defineModel<{ url: string; parserParams: ParserOptions }>('options', {
@@ -82,7 +83,8 @@ const addResult = (manga: SearchResult) => {
         class="dropdown-item d-flex"
         @click="addResult(manga)"
       >
-        <img
+        <ThumbHash
+          :hash="manga.raw.cover.raw?.thumbhash"
           :src="manga.raw.cover.x150?.x1"
           :srcset="
             manga.raw.cover.x150 &&

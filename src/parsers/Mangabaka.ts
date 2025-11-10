@@ -141,7 +141,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       )
     }
     if (page.is_licensed && options.showLicensed) descriptionHeader.push('💱 Licensed')
-    if (page.has_anime) {
+    if (page.has_anime && page.anime) {
       const animeEps: string[] = []
       page.anime.start
         .split('/')

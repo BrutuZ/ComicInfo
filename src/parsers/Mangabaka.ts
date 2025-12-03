@@ -21,11 +21,7 @@ const animeRE = /Vol(ume|\.)? \d+, Ch(\.|ap(ter)?) /
 export function MangaBaka(): Searcher
 export function MangaBaka(url?: string, options?: ParserOptions): Searcher
 export function MangaBaka(url: string = '', options: ParserOptions = {}): Searcher {
-  const source =
-    // [
-    { name: 'MangaBaka', url: 'https://mangabaka.dev', icon: 'mb.png' }
-  // { name: 'MangaDex', url: 'mangadex.org', icon: 'md.png' },
-  //]
+  const source = { name: 'MangaBaka', url: 'https://mangabaka.org', icon: 'mb.png' }
   const apiUrl = 'https://api.mangabaka.dev'
   const urlRE =
     new RegExp('^(?<protocol>https?://)?' + source.url.slice(8) + '/(?<id>\\d+)').exec(url)
@@ -35,7 +31,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
     name: source.name, // source.map(s => s.name),
     url: source.url, // source.map(s => `https://${s.url}`),
     icon: source.icon, // source.map(s => s.icon),
-    sources: [source, { name: 'MangaDex', url: 'https://mangadex.org', icon: 'md.png' }],
+    sources: [source],
     validateUrl: () => Boolean(urlRE?.id),
     parse: async () => {
       if (!urlRE)

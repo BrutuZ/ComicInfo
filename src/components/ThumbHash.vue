@@ -20,7 +20,7 @@ const b64toDataUrl = (b64ThumbHash: string) =>
 </script>
 
 <template>
-  <img v-if="props.hash && !coverLoaded" :src="b64toDataUrl(props.hash)" :class="class" />
+  <img v-if="props.hash && !coverLoaded" :src="b64toDataUrl(props.hash)" :class="props.class" />
   <img
     v-show="!props.hash || coverLoaded"
     :src="src"

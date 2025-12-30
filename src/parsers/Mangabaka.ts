@@ -163,7 +163,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         page.native_title,
         ...Object.values(page.secondary_titles).flatMap(o => o?.map(e => e.title)),
       ]),
-    ].filter(t => t != info.title)
+    ].filter(t => t && t != info.title)
     if (altTitles.length > 0) {
       description.push('')
       description.push('Alternate titles:\n' + altTitles.map(t => `  - ${t}`).join('\n'))

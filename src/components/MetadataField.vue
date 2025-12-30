@@ -19,6 +19,7 @@ const [modelValue, modelModifiers] = defineModel({
   get(value: string | string[] | Date): string {
     // Data to Field
     if (typeof value == 'string') return value
+    if (['undefined', 'null'].includes(String(value))) return ''
     if (modelModifiers.date && 'getDate' in value && !('join' in value)) return dateField(value)
     if (modelModifiers.list && 'join' in value && !('getDate' in value)) return listField(value)
     return String(value)

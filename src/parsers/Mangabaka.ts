@@ -5,6 +5,8 @@ import type {
   SeriesData,
   SourceAnilist,
   SourceMal,
+  SourceNames,
+  SourcesType,
 } from '@/parsers/MangabakaType'
 import { MangaInfo, type ParserOptions, type Searcher, type TachiStatus } from '@/types'
 
@@ -17,7 +19,7 @@ const statusMap = {
   upcoming: 'Unknown',
 }
 
-const sourceUrlMap: { [k: string]: string } = {
+const sourceUrlMap: { [k in SourceNames]: string } = {
   anilist: 'https://anilist.co/manga/',
   anime_planet: 'https://www.anime-planet.com/manga/',
   anime_news_network: 'https://www.animenewsnetwork.com/encyclopedia/manga.php?id=',
@@ -35,7 +37,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
   const source = { name: 'MangaBaka', url: 'https://mangabaka.org', icon: 'mb.png' }
   const apiUrl = 'https://api.mangabaka.dev'
   const urlRE =
-    new RegExp('^(?<protocol>https?://)?' + source.url.slice(8) + '/(?<id>\\d+)').exec(url)
+    new RegExp('(?<protocol>https?://)?' + source.url.slice(8) + '/(?<id>\\d+)').exec(url)
       ?.groups || {}
 
   return {
@@ -136,8 +138,8 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       publisher: page.publishers?.map(p => p.name).join(', '),
       description: page.description,
       url: ([
-        ...Object.entries(page.source)
-          .map(s => { if (s[1]?.id && s[0] in sourceUrlMap) return `${sourceUrlMap[s[0]]}${s[1].id}` }),
+        ...Object.entries(page.source as SourcesType)
+          .map(s => { if (s[0] in sourceUrlMap && s[1]?.id) return `${sourceUrlMap[s[0] as SourceNames]}${s[1].id}` }),
         ...(page.links || []).reverse(),
       ].filter(u => u)).join(' '),
     })

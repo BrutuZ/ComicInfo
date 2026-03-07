@@ -235,7 +235,11 @@ export interface SeriesData {
   source: Sources
 }
 
-export interface Sources {
+export type SourceNames = 'anilist' | 'anime_planet' | 'anime_news_network' | 'kitsu' | 'manga_updates' | 'my_anime_list' | 'shikimori'
+
+export type SourcesType = { [k in SourceNames]?: SourceSimple }
+
+interface Sources {
   anilist: SourceSimple | SourceAnilist
   anime_planet?: SourceSimple
   anime_news_network: SourceSimple | SourceANN
@@ -243,7 +247,6 @@ export interface Sources {
   manga_updates: SourceSimple | SourceMangaUpdates
   my_anime_list: SourceSimple | SourceMal
   shikimori?: SourceSimple | SourceShikimori
-  [k: string]: SourceSimple | undefined
 }
 
 export interface SecondaryTitle {

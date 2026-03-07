@@ -232,15 +232,18 @@ export interface SeriesData {
   /**
    * Source specific data
    */
-  source: {
-    anilist: SourceSimple | SourceAnilist
-    anime_planet?: SourceSimple
-    anime_news_network: SourceSimple | SourceANN
-    kitsu: SourceSimple | SourceKitsu
-    manga_updates: SourceSimple | SourceMangaUpdates
-    my_anime_list: SourceSimple | SourceMal
-    shikimori?: SourceSimple | SourceShikimori
-  }
+  source: Sources
+}
+
+export interface Sources {
+  anilist: SourceSimple | SourceAnilist
+  anime_planet?: SourceSimple
+  anime_news_network: SourceSimple | SourceANN
+  kitsu: SourceSimple | SourceKitsu
+  manga_updates: SourceSimple | SourceMangaUpdates
+  my_anime_list: SourceSimple | SourceMal
+  shikimori?: SourceSimple | SourceShikimori
+  [k: string]: SourceSimple | undefined
 }
 
 export interface SecondaryTitle {
@@ -250,7 +253,7 @@ export interface SecondaryTitle {
   // [k: string]: unknown
 }
 
-interface SourceSimple {
+export interface SourceSimple {
   id: number
   rating: number
   // [k: string]: unknown
@@ -269,16 +272,16 @@ export interface SourceAnilist extends SourceSimple {
       [k: string]: unknown
     }
     format:
-      | 'MANGA'
-      | 'MOVIE'
-      | 'MUSIC'
-      | 'NOVEL'
-      | 'ONA'
-      | 'ONE_SHOT'
-      | 'OVA'
-      | 'SPECIAL'
-      | 'TV'
-      | 'TV_SHORT'
+    | 'MANGA'
+    | 'MOVIE'
+    | 'MUSIC'
+    | 'NOVEL'
+    | 'ONA'
+    | 'ONE_SHOT'
+    | 'OVA'
+    | 'SPECIAL'
+    | 'TV'
+    | 'TV_SHORT'
     id: number
     status: 'CANCELLED' | 'FINISHED' | 'HIATUS' | 'NOT_YET_RELEASED' | 'RELEASING'
     title: {
@@ -321,21 +324,21 @@ export interface SourceAnilist extends SourceSimple {
     season: 'FALL' | 'SPRING' | 'SUMMER' | 'WINTER'
     seasonYear: number
     source:
-      | 'ANIME'
-      | 'COMIC'
-      | 'DOUJINSHI'
-      | 'GAME'
-      | 'LIGHT_NOVEL'
-      | 'LIVE_ACTION'
-      | 'MANGA'
-      | 'MULTIMEDIA_PROJECT'
-      | 'NOVEL'
-      | 'ORIGINAL'
-      | 'OTHER'
-      | 'PICTURE_BOOK'
-      | 'VIDEO_GAME'
-      | 'VISUAL_NOVEL'
-      | 'WEB_NOVEL'
+    | 'ANIME'
+    | 'COMIC'
+    | 'DOUJINSHI'
+    | 'GAME'
+    | 'LIGHT_NOVEL'
+    | 'LIVE_ACTION'
+    | 'MANGA'
+    | 'MULTIMEDIA_PROJECT'
+    | 'NOVEL'
+    | 'ORIGINAL'
+    | 'OTHER'
+    | 'PICTURE_BOOK'
+    | 'VIDEO_GAME'
+    | 'VISUAL_NOVEL'
+    | 'WEB_NOVEL'
     synonyms: string[]
     tags: {
       category?: string
@@ -380,16 +383,16 @@ export interface SourceAnilist extends SourceSimple {
       allTime: boolean
       context: string
       format:
-        | 'MANGA'
-        | 'MOVIE'
-        | 'MUSIC'
-        | 'NOVEL'
-        | 'ONA'
-        | 'ONE_SHOT'
-        | 'OVA'
-        | 'SPECIAL'
-        | 'TV'
-        | 'TV_SHORT'
+      | 'MANGA'
+      | 'MOVIE'
+      | 'MUSIC'
+      | 'NOVEL'
+      | 'ONA'
+      | 'ONE_SHOT'
+      | 'OVA'
+      | 'SPECIAL'
+      | 'TV'
+      | 'TV_SHORT'
       id: number
       rank: number
       type: 'POPULAR' | 'RATED'
@@ -409,16 +412,16 @@ export interface SourceAnilist extends SourceSimple {
             [k: string]: unknown
           }
           format:
-            | 'MANGA'
-            | 'MOVIE'
-            | 'MUSIC'
-            | 'NOVEL'
-            | 'ONA'
-            | 'ONE_SHOT'
-            | 'OVA'
-            | 'SPECIAL'
-            | 'TV'
-            | 'TV_SHORT'
+          | 'MANGA'
+          | 'MOVIE'
+          | 'MUSIC'
+          | 'NOVEL'
+          | 'ONA'
+          | 'ONE_SHOT'
+          | 'OVA'
+          | 'SPECIAL'
+          | 'TV'
+          | 'TV_SHORT'
           id: number
           status: 'CANCELLED' | 'FINISHED' | 'HIATUS' | 'NOT_YET_RELEASED' | 'RELEASING'
           title: {
@@ -432,19 +435,19 @@ export interface SourceAnilist extends SourceSimple {
           [k: string]: unknown
         }
         relationType:
-          | 'ADAPTATION'
-          | 'ALTERNATIVE'
-          | 'CHARACTER'
-          | 'COMPILATION'
-          | 'CONTAINS'
-          | 'OTHER'
-          | 'PARENT'
-          | 'PREQUEL'
-          | 'SEQUEL'
-          | 'SIDE_STORY'
-          | 'SOURCE'
-          | 'SPIN_OFF'
-          | 'SUMMARY'
+        | 'ADAPTATION'
+        | 'ALTERNATIVE'
+        | 'CHARACTER'
+        | 'COMPILATION'
+        | 'CONTAINS'
+        | 'OTHER'
+        | 'PARENT'
+        | 'PREQUEL'
+        | 'SEQUEL'
+        | 'SIDE_STORY'
+        | 'SOURCE'
+        | 'SPIN_OFF'
+        | 'SUMMARY'
         [k: string]: unknown
       }[]
       [k: string]: unknown
@@ -604,23 +607,23 @@ export interface SourceMangaUpdates extends SourceSimple {
       [k: string]: unknown
     }
     type:
-      | 'Artbook'
-      | 'Doujinshi'
-      | 'Drama CD'
-      | 'Filipino'
-      | 'Indonesian'
-      | 'Manga'
-      | 'Manhwa'
-      | 'Manhua'
-      | 'Novel'
-      | 'OEL'
-      | 'Thai'
-      | 'Vietnamese'
-      | 'Malaysian'
-      | 'Nordic'
-      | 'French'
-      | 'Spanish'
-      | 'German'
+    | 'Artbook'
+    | 'Doujinshi'
+    | 'Drama CD'
+    | 'Filipino'
+    | 'Indonesian'
+    | 'Manga'
+    | 'Manhwa'
+    | 'Manhua'
+    | 'Novel'
+    | 'OEL'
+    | 'Thai'
+    | 'Vietnamese'
+    | 'Malaysian'
+    | 'Nordic'
+    | 'French'
+    | 'Spanish'
+    | 'German'
     year: string
     bayesian_rating: number
     rating_votes: number
@@ -650,16 +653,16 @@ export interface SourceMangaUpdates extends SourceSimple {
     related_series: {
       relation_id?: number
       relation_type:
-        | 'Prequel'
-        | 'Sequel'
-        | 'Spin-Off'
-        | 'Adapted From'
-        | 'Alternate Version'
-        | 'Part of Anthology'
-        | 'Main Story'
-        | 'Side Story'
-        | 'Full Anthology'
-        | 'Other'
+      | 'Prequel'
+      | 'Sequel'
+      | 'Spin-Off'
+      | 'Adapted From'
+      | 'Alternate Version'
+      | 'Part of Anthology'
+      | 'Main Story'
+      | 'Side Story'
+      | 'Full Anthology'
+      | 'Other'
       related_series_id: number
       related_series_name: string
       related_series_url: string
@@ -938,24 +941,24 @@ export interface SourceKitsu extends SourceSimple {
       nodes?: {
         externalId: string
         externalSite:
-          | 'ANIDB'
-          | 'ANILIST_ANIME'
-          | 'ANILIST_MANGA'
-          | 'ANIMENEWSNETWORK'
-          | 'AOZORA'
-          | 'HULU'
-          | 'IMDB_EPISODES'
-          | 'MANGAUPDATES'
-          | 'MYANIMELIST_ANIME'
-          | 'MYANIMELIST_CHARACTERS'
-          | 'MYANIMELIST_MANGA'
-          | 'MYANIMELIST_PEOPLE'
-          | 'MYANIMELIST_PRODUCERS'
-          | 'MYDRAMALIST'
-          | 'THETVDB'
-          | 'THETVDB_SEASON'
-          | 'THETVDB_SERIES'
-          | 'TRAKT'
+        | 'ANIDB'
+        | 'ANILIST_ANIME'
+        | 'ANILIST_MANGA'
+        | 'ANIMENEWSNETWORK'
+        | 'AOZORA'
+        | 'HULU'
+        | 'IMDB_EPISODES'
+        | 'MANGAUPDATES'
+        | 'MYANIMELIST_ANIME'
+        | 'MYANIMELIST_CHARACTERS'
+        | 'MYANIMELIST_MANGA'
+        | 'MYANIMELIST_PEOPLE'
+        | 'MYANIMELIST_PRODUCERS'
+        | 'MYDRAMALIST'
+        | 'THETVDB'
+        | 'THETVDB_SEASON'
+        | 'THETVDB_SERIES'
+        | 'TRAKT'
         id: number
         [k: string]: unknown
       }[]
@@ -990,18 +993,18 @@ export interface SourceKitsu extends SourceSimple {
           [k: string]: unknown
         }
         kind:
-          | 'ADAPTATION'
-          | 'ALTERNATIVE_SETTING'
-          | 'ALTERNATIVE_VERSION'
-          | 'CHARACTER'
-          | 'FULL_STORY'
-          | 'OTHER'
-          | 'PARENT_STORY'
-          | 'PREQUEL'
-          | 'SEQUEL'
-          | 'SIDE_STORY'
-          | 'SPINOFF'
-          | 'SUMMARY'
+        | 'ADAPTATION'
+        | 'ALTERNATIVE_SETTING'
+        | 'ALTERNATIVE_VERSION'
+        | 'CHARACTER'
+        | 'FULL_STORY'
+        | 'OTHER'
+        | 'PARENT_STORY'
+        | 'PREQUEL'
+        | 'SEQUEL'
+        | 'SIDE_STORY'
+        | 'SPINOFF'
+        | 'SUMMARY'
         [k: string]: unknown
       }[]
       [k: string]: unknown

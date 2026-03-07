@@ -4,6 +4,7 @@ import type {
   SearchResponse,
   SeriesData,
   SourceAnilist,
+  SourceMal,
 } from '@/parsers/MangabakaType'
 import { MangaInfo, type ParserOptions, type Searcher, type TachiStatus } from '@/types'
 
@@ -14,6 +15,16 @@ const statusMap = {
   cancelled: 'Cancelled',
   hiatus: 'On hiatus',
   upcoming: 'Unknown',
+}
+
+const sourceUrlMap: { [k: string]: string } = {
+  anilist: 'https://anilist.co/manga/',
+  anime_planet: 'https://www.anime-planet.com/manga/',
+  anime_news_network: 'https://www.animenewsnetwork.com/encyclopedia/manga.php?id=',
+  kitsu: 'https://kitsu.app/manga/',
+  manga_updates: 'https://www.mangaupdates.com/series/',
+  my_anime_list: 'https://myanimelist.net/manga/',
+  shikimori: 'https://shikimori.one/mangas/',
 }
 
 const animeRE = /Vol(ume|\.)? \d+, Ch(\.|ap(ter)?) /
@@ -72,14 +83,14 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
     search: async (query: string) => {
       const page = await fetch(
         `${apiUrl}/v1/series/search?` +
-          new URLSearchParams(
-            [
-              ['q', query],
-              ['type_not', 'novel'],
-            ].concat(
-              ['safe', 'suggestive', 'erotica', 'pornographic'].map(r => ['content_rating', r]),
-            ),
+        new URLSearchParams(
+          [
+            ['q', query],
+            ['type_not', 'novel'],
+          ].concat(
+            ['safe', 'suggestive', 'erotica', 'pornographic'].map(r => ['content_rating', r]),
           ),
+        ),
         {
           headers: {
             Accept: 'application/json',
@@ -124,7 +135,11 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       status: statusMap[page.status] as TachiStatus,
       publisher: page.publishers?.map(p => p.name).join(', '),
       description: page.description,
-      url: (page.links || []).join(' '),
+      url: ([
+        ...Object.entries(page.source)
+          .map(s => { if (s[1]?.id && s[0] in sourceUrlMap) return `${sourceUrlMap[s[0]]}${s[1].id}` }),
+        ...(page.links || []).reverse(),
+      ].filter(u => u)).join(' '),
     })
     const description = []
     const descriptionHeader = []
@@ -132,8 +147,8 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       const stars = Math.min(Number((page.rating / (page.rating < 10 ? 2 : 20)).toFixed()), 5)
       descriptionHeader.push(
         '★'.repeat(stars) +
-          '☆'.repeat(5 - stars) +
-          ` ${(page.rating < 10 ? page.rating : page.rating / 10).toFixed(1)}`,
+        '☆'.repeat(5 - stars) +
+        ` ${(page.rating < 10 ? page.rating : page.rating / 10).toFixed(1)}`,
       )
     }
     if (page.is_licensed && options.showLicensed) descriptionHeader.push('💱 Licensed')
@@ -144,8 +159,8 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         .forEach((season, index) =>
           animeEps.push(
             season.replace(animeRE, 'Ch.').trim() +
-              '-' +
-              (page.anime.end?.split('/')[index]?.replace(animeRE, '').trim() || '?'),
+            '-' +
+            (page.anime.end?.split('/')[index]?.replace(animeRE, '').trim() || '?'),
           ),
         )
       descriptionHeader.push('📺' + animeEps.join(', '))
@@ -162,6 +177,11 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         page.romanized_title,
         page.native_title,
         ...Object.values(page.secondary_titles).flatMap(o => o?.map(e => e.title)),
+        ...Object.values((page.source.anilist as SourceAnilist)?.response?.title || {}),
+        (page.source.my_anime_list as SourceMal)?.response?.title,
+        (page.source.my_anime_list as SourceMal)?.response?.title_english,
+        (page.source.my_anime_list as SourceMal)?.response?.title_japanese,
+        ...((page.source.my_anime_list as SourceMal)?.response?.title_synonyms || []),
       ]),
     ].filter(t => t && t != info.title)
     if (altTitles.length > 0) {

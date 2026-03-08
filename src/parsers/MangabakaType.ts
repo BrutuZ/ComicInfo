@@ -146,7 +146,7 @@ export interface SeriesData {
   /**
    * A raw list of links related to the series. There will always be a link to MangaBaka in this list.
    */
-  links?: string[]
+  links: string[]
   /**
    * List of publishers for the series
    */

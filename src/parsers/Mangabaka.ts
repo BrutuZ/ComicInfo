@@ -137,11 +137,12 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       status: statusMap[page.status] as TachiStatus,
       publisher: page.publishers?.map(p => p.name).join(', '),
       description: page.description,
-      url: ([
+      url: ([...new Set([
+        `${source.url}/${page.id}`,
         ...Object.entries(page.source as SourcesType)
           .map(s => { if (s[0] in sourceUrlMap && s[1]?.id) return `${sourceUrlMap[s[0] as SourceNames]}${s[1].id}` }),
-        ...(page.links || []).reverse(),
-      ].filter(u => u)).join(' '),
+        ...(page.links || []),
+      ])].filter(u => u)).join(' '),
     })
     const description = []
     const descriptionHeader = []

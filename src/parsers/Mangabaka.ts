@@ -126,17 +126,22 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           ? page.title || page.romanized_title
           : page.romanized_title || page.title) || page.native_title,
       genre: [
-        ...(options.showLicensed
-          ? page.publishers.map(p => (options.groupTags ? `Licensed:${p.name}` : p.name))
-          : []),
         ...[
           ...(page.tags_v2 || []).filter(t => t.name_path.startsWith('Theme')),
-          ...(page.tags_v2 || []).filter(t => !t.name_path.startsWith('Theme')),
+          ...(page.tags_v2 || []).filter(
+            (t, _, a) =>
+              !t.name_path.startsWith('Theme') &&
+              !a.map(x => x.parent_id).includes(t.id) &&
+              t.implied_by_tag_ids.length == 0,
+          ),
         ].map(t =>
           options.groupTags
             ? [t.name_path.split(' > ')[0], t.name_path.split(' > ').pop()].join(':')
             : t.name,
         ),
+        ...(options.showLicensed
+          ? page.publishers.map(p => (options.groupTags ? `Licensed:${p.name}` : p.name))
+          : []),
       ],
       artist: page.artists,
       author: page.authors,
@@ -162,8 +167,12 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
     if (page.rating) {
       const stars = Math.min(Number((page.rating / (page.rating < 10 ? 2 : 20)).toFixed()), 5)
       descriptionHeader.push(
-        '★'.repeat(stars) + '☆'.repeat(5 - stars) +
-          ` ${(page.rating < 10 ? page.rating : page.rating / 10).toFixed(1)}`,
+        [
+          '★'.repeat(stars),
+          '☆'.repeat(5 - stars),
+          ' ',
+          (page.rating < 10 ? page.rating : page.rating / 10).toFixed(1),
+        ].join(''),
       )
     }
     // if (page.is_licensed && options.showLicensed) descriptionHeader.push('💱 Licensed')

@@ -1,4 +1,4 @@
-import { blankLine, capitalizeTags, DEV, replaceSmartQuotes, stripHtmlTags } from '@/main'
+import { blankLine, DEV, replaceSmartQuotes, stripHtmlTags } from '@/main'
 import type {
   MangaResponse,
   SearchResponse,
@@ -85,14 +85,14 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
     search: async (query: string) => {
       const page = await fetch(
         `${apiUrl}/v1/series/search?` +
-        new URLSearchParams(
-          [
-            ['q', query],
-            ['type_not', 'novel'],
-          ].concat(
-            ['safe', 'suggestive', 'erotica', 'pornographic'].map(r => ['content_rating', r]),
+          new URLSearchParams(
+            [
+              ['q', query],
+              ['type_not', 'novel'],
+            ].concat(
+              ['safe', 'suggestive', 'erotica', 'pornographic'].map(r => ['content_rating', r]),
+            ),
           ),
-        ),
         {
           headers: {
             Accept: 'application/json',
@@ -126,10 +126,17 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           ? page.title || page.romanized_title
           : page.romanized_title || page.title) || page.native_title,
       genre: [
-        ...(page.genres || [])
-          .sort()
-          .map(g => (options.groupTags ? 'Genre:' : '') + capitalizeTags(g)),
-        ...(page.tags || []).sort().map(t => (options.groupTags ? 'Tag:' : '') + t),
+        ...(options.showLicensed
+          ? page.publishers.map(p => (options.groupTags ? `Licensed:${p.name}` : p.name))
+          : []),
+        ...[
+          ...(page.tags_v2 || []).filter(t => t.name_path.startsWith('Theme')),
+          ...(page.tags_v2 || []).filter(t => !t.name_path.startsWith('Theme')),
+        ].map(t =>
+          options.groupTags
+            ? [t.name_path.split(' > ')[0], t.name_path.split(' > ').pop()].join(':')
+            : t.name,
+        ),
       ],
       artist: page.artists,
       author: page.authors,
@@ -137,24 +144,29 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       status: statusMap[page.status] as TachiStatus,
       publisher: page.publishers?.map(p => p.name).join(', '),
       description: page.description,
-      url: ([...new Set([
-        `${source.url}/${page.id}`,
-        ...Object.entries(page.source as SourcesType)
-          .map(s => { if (s[0] in sourceUrlMap && s[1]?.id) return `${sourceUrlMap[s[0] as SourceNames]}${s[1].id}` }),
-        ...(page.links || []),
-      ])].filter(u => u)).join(' '),
+      url: [
+        ...new Set([
+          `${source.url}/${page.id}`,
+          ...Object.entries(page.source as SourcesType).map(s => {
+            if (s[0] in sourceUrlMap && s[1]?.id)
+              return `${sourceUrlMap[s[0] as SourceNames]}${s[1].id}`
+          }),
+          ...(page.links || []),
+        ]),
+      ]
+        .filter(u => u)
+        .join(' '),
     })
     const description = []
     const descriptionHeader = []
     if (page.rating) {
       const stars = Math.min(Number((page.rating / (page.rating < 10 ? 2 : 20)).toFixed()), 5)
       descriptionHeader.push(
-        '★'.repeat(stars) +
-        '☆'.repeat(5 - stars) +
-        ` ${(page.rating < 10 ? page.rating : page.rating / 10).toFixed(1)}`,
+        '★'.repeat(stars) + '☆'.repeat(5 - stars) +
+          ` ${(page.rating < 10 ? page.rating : page.rating / 10).toFixed(1)}`,
       )
     }
-    if (page.is_licensed && options.showLicensed) descriptionHeader.push('💱 Licensed')
+    // if (page.is_licensed && options.showLicensed) descriptionHeader.push('💱 Licensed')
     if (page.has_anime && page.anime) {
       const animeEps: string[] = []
       page.anime.start
@@ -162,11 +174,11 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         .forEach((season, index) =>
           animeEps.push(
             season.replace(animeRE, 'Ch.').trim() +
-            '-' +
-            (page.anime.end?.split('/')[index]?.replace(animeRE, '').trim() || '?'),
+              '-' +
+              (page.anime.end?.split('/')[index]?.replace(animeRE, '').trim() || '?'),
           ),
         )
-      descriptionHeader.push('📺' + animeEps.join(', '))
+      descriptionHeader.push('📺 ' + animeEps.join(', '))
     }
     if (descriptionHeader.length > 0) {
       description.push(descriptionHeader.join(' | ') + '\n')

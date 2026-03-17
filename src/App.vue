@@ -20,7 +20,7 @@ const options = ref({
   parserParams: {
     english: true,
     groupTags: true,
-    showLicensed: true,
+    showLicensed: false,
     proxy: false,
   } as ParserOptions,
 })

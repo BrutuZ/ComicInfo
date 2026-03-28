@@ -3,8 +3,6 @@ import type {
   MangaResponse,
   SearchResponse,
   SeriesData,
-  SourceAnilist,
-  SourceMal,
   SourceNames,
   SourcesType,
 } from '@/parsers/MangabakaType'
@@ -123,8 +121,10 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
       source: source,
       title:
         (options.english
-          ? page.title || page.romanized_title
-          : page.romanized_title || page.title) || page.native_title,
+          ? page.titles.find(t => t.is_primary && t.language === 'en')?.title
+          : page.titles.find(
+              t => t.is_primary && t.language !== 'en' && t.traits.includes('official'),
+            )?.title) || page.titles.find(t => t.is_primary)?.title,
       genre: [
         ...[
           ...(page.tags_v2 || []).filter(t => t.name_path.startsWith('Theme')),
@@ -197,15 +197,12 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
 
     const altTitles = [
       ...new Set([
-        page.title,
-        page.romanized_title,
-        page.native_title,
-        ...Object.values(page.secondary_titles).flatMap(o => o?.map(e => e.title)),
-        ...Object.values((page.source.anilist as SourceAnilist)?.response?.title || {}),
-        (page.source.my_anime_list as SourceMal)?.response?.title,
-        (page.source.my_anime_list as SourceMal)?.response?.title_english,
-        (page.source.my_anime_list as SourceMal)?.response?.title_japanese,
-        ...((page.source.my_anime_list as SourceMal)?.response?.title_synonyms || []),
+        ...page.titles.map(t => t.title),
+        ...Object.values(page.source.anilist?.response?.title || {}),
+        page.source.my_anime_list?.response?.title,
+        page.source.my_anime_list?.response?.title_english,
+        page.source.my_anime_list?.response?.title_japanese,
+        ...(page.source.my_anime_list?.response?.title_synonyms || []),
       ]),
     ].filter(t => t && t != info.title)
     if (altTitles.length > 0) {
@@ -216,8 +213,8 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
     info.description = description.join(blankLine)
 
     if (page.year) info.date = `${page.year}-01-01`
-    if ((page.source.anilist as SourceAnilist).response?.startDate.year) {
-      const sd = (page.source.anilist as SourceAnilist).response.startDate
+    if (page.source.anilist.response?.startDate.year) {
+      const sd = page.source.anilist.response.startDate
       info.date = `${sd.year}-${sd.month || '01'}-${sd.day || '01'}`
     }
     return info

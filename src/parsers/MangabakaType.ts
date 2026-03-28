@@ -67,6 +67,10 @@ export interface SeriesData {
     // [k: string]: unknown
   }
   /**
+   * Titles V2
+   */
+  titles: TitlesV2[]
+  /**
    * The primary cover image for the series. You may hotlink to the non-raw image in your application.
    */
   cover: {
@@ -254,6 +258,24 @@ interface TagV2 {
   content_rating: ContentRating
 }
 
+interface TitlesV2 {
+  language:
+    | 'en'
+    | 'ja'
+    | 'ja-Latn'
+    | 'ko'
+    | 'ko-Latn'
+    | 'zh'
+    | 'zh-Latn'
+    | 'zh-hk'
+    | 'es-la'
+    | 'pt-br'
+  traits: ['official' | 'native' | 'alternative']
+  title: string
+  note: string | null
+  is_primary: boolean
+}
+
 export type SourceNames =
   | 'anilist'
   | 'anime_planet'
@@ -266,13 +288,13 @@ export type SourceNames =
 export type SourcesType = { [k in SourceNames]?: SourceSimple }
 
 interface Sources {
-  anilist: SourceSimple | SourceAnilist
+  anilist: SourceAnilist
   anime_planet?: SourceSimple
-  anime_news_network: SourceSimple | SourceANN
-  kitsu: SourceSimple | SourceKitsu
-  manga_updates: SourceSimple | SourceMangaUpdates
-  my_anime_list: SourceSimple | SourceMal
-  shikimori?: SourceSimple | SourceShikimori
+  anime_news_network: SourceANN
+  kitsu: SourceKitsu
+  manga_updates: SourceMangaUpdates
+  my_anime_list: SourceMal
+  shikimori?: SourceShikimori
 }
 
 export interface SecondaryTitle {

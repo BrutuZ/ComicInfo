@@ -104,6 +104,12 @@ export interface SeriesData {
    * The year publication began for the series
    */
   year: number
+  published: {
+    start_date: string | null
+    end_date: string | null
+    start_date_is_estimated: boolean
+    end_date_is_estimated: boolean
+  }
   /**
    * The series publication status.
    */
@@ -288,12 +294,12 @@ export type SourceNames =
 export type SourcesType = { [k in SourceNames]?: SourceSimple }
 
 interface Sources {
-  anilist: SourceAnilist
+  anilist: SourceSimple
   anime_planet?: SourceSimple
   anime_news_network: SourceANN
   kitsu: SourceKitsu
   manga_updates: SourceMangaUpdates
-  my_anime_list: SourceMal
+  my_anime_list: SourceSimple
   shikimori?: SourceShikimori
 }
 

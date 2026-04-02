@@ -195,16 +195,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
 
     if (page.description) description.push(stripHtmlTags(page.description))
 
-    const altTitles = [
-      ...new Set([
-        ...page.titles.map(t => t.title),
-        ...Object.values(page.source.anilist?.response?.title || {}),
-        page.source.my_anime_list?.response?.title,
-        page.source.my_anime_list?.response?.title_english,
-        page.source.my_anime_list?.response?.title_japanese,
-        ...(page.source.my_anime_list?.response?.title_synonyms || []),
-      ]),
-    ].filter(t => t && t != info.title)
+    const altTitles = page.titles.map(t => t.title).filter(t => t && t != info.title)
     if (altTitles.length > 0) {
       description.push('')
       description.push('Alternate titles:\n' + altTitles.map(t => `  - ${t}`).join('\n'))
@@ -212,11 +203,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
 
     info.description = description.join(blankLine)
 
-    if (page.year) info.date = `${page.year}-01-01`
-    if (page.source.anilist.response?.startDate.year) {
-      const sd = page.source.anilist.response.startDate
-      info.date = `${sd.year}-${sd.month || '01'}-${sd.day || '01'}`
-    }
+    info.date = page.published.start_date || ''
     return info
   }
 }

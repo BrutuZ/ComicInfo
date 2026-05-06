@@ -127,13 +127,28 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
             )?.title) || page.titles.find(t => t.is_primary)?.title,
       genre: [
         ...[
-          ...(page.tags_v2 || []).filter(t => t.name_path.startsWith('Theme')),
+          ...(page.tags_v2 || []).filter(
+            (t, _, a) =>
+              t.name_path.startsWith('Theme') &&
+              !a.map(x => x.parent_id).includes(t.id) &&
+              t.implied_by_tag_ids.length == 0,
+          ),
+          ...(page.genres || [])
+            .filter(g => !page.tags_v2.map(t => t.name).includes(g))
+            .map(g => {
+              return { name: g, name_path: `Genre > ${g}` }
+            }),
           ...(page.tags_v2 || []).filter(
             (t, _, a) =>
               !t.name_path.startsWith('Theme') &&
               !a.map(x => x.parent_id).includes(t.id) &&
               t.implied_by_tag_ids.length == 0,
           ),
+          ...(page.tags || [])
+            .filter(t => !page.tags_v2.map(tt => tt.name).includes(t))
+            .map(t => {
+              return { name: t, name_path: `Other > ${t}` }
+            }),
         ].map(t =>
           options.groupTags
             ? [t.name_path.split(' > ')[0], t.name_path.split(' > ').pop()].join(':')

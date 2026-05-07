@@ -134,7 +134,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
               t.implied_by_tag_ids.length == 0,
           ),
           ...(page.genres || [])
-            .filter(g => !page.tags_v2.map(t => t.name).includes(g))
+            .filter(g => !page.tags_v2.map(t => t.name.toLowerCase()).includes(g.toLowerCase()))
             .map(g => {
               return { name: g, name_path: `Genre > ${capitalizeTags(g)}` }
             }),
@@ -145,7 +145,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
               t.implied_by_tag_ids.length == 0,
           ),
           ...(page.tags || [])
-            .filter(t => !page.tags_v2.map(tt => tt.name).includes(t))
+            .filter(t => !page.tags_v2.map(tt => tt.name.toLowerCase()).includes(t.toLowerCase()))
             .map(t => {
               return { name: t, name_path: `Other > ${t}` }
             }),

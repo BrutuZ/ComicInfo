@@ -1,4 +1,4 @@
-import { blankLine, DEV, replaceSmartQuotes, stripHtmlTags } from '@/main'
+import { blankLine, capitalizeTags, DEV, replaceSmartQuotes, stripHtmlTags } from '@/main'
 import type {
   MangaResponse,
   SearchResponse,
@@ -136,7 +136,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           ...(page.genres || [])
             .filter(g => !page.tags_v2.map(t => t.name).includes(g))
             .map(g => {
-              return { name: g, name_path: `Genre > ${g}` }
+              return { name: g, name_path: `Genre > ${capitalizeTags(g)}` }
             }),
           ...(page.tags_v2 || []).filter(
             (t, _, a) =>

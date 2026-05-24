@@ -160,7 +160,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
             ? [t.name_path.split(' > ')[0], t.name_path.split(' > ').pop()].join(':')
             : t.name,
         ),
-        ...(options.showLicensed
+        ...(options.showLicensed && page.publishers !== null
           ? page.publishers.map(p => (options.groupTags ? `Licensed:${p.name}` : p.name))
           : []),
       ],

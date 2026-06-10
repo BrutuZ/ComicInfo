@@ -28,7 +28,7 @@ onMounted(() => {
   <div class="card mb-3" :id="'card-' + manga.uuid">
     <div class="row g-0">
       <div v-if="manga.source" class="card-header text-center">
-        <a :href="manga.url.split(' ')[0]">
+        <a :href="manga.url.split(' ')[0]" target="_blank">
           <img
             v-if="manga.source.icon"
             :src="`./assets/${manga.source.icon}`"

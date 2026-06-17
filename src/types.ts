@@ -127,6 +127,7 @@ export interface ParserOptions {
   proxy?: boolean
   groupTags?: boolean
   showLicensed?: boolean
+  spoilers?: boolean
   [k: string]: boolean | undefined
 }
 

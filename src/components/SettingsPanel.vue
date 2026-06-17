@@ -29,6 +29,16 @@ const options = defineModel<{ url: string; parserParams: ParserOptions }>('optio
       />
     </div>
     <div class="form-check form-switch">
+      <label for="spoilers" class="form-check-label">Include Tags Marked as Spoiler</label>
+      <input
+        id="spoilers"
+        type="checkbox"
+        class="form-check-input"
+        role="switch"
+        v-model="options.parserParams.spoilers"
+      />
+    </div>
+    <div class="form-check form-switch">
       <label for="licensed" class="form-check-label">Show Licensed Status</label>
       <input
         id="licensed"

@@ -264,7 +264,7 @@ interface TagV2 {
   content_rating: ContentRating
 }
 
-interface TitlesV2 {
+export interface TitlesV2 {
   language:
     | 'en'
     | 'ja'

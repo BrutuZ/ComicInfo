@@ -1,10 +1,11 @@
-import { blankLine, capitalizeTags, DEV, replaceSmartQuotes, stripHtmlTags } from '@/main'
+import { blankLine, DEV, replaceSmartQuotes, stripHtmlTags, unique } from '@/main'
 import type {
   MangaResponse,
   SearchResponse,
   SeriesData,
   SourceNames,
   SourcesType,
+  TitlesV2,
 } from '@/parsers/MangabakaType'
 import { MangaInfo, type ParserOptions, type Searcher, type TachiStatus } from '@/types'
 
@@ -116,54 +117,35 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
     },
   }
 
+  function entryLanguage(mediaType: SeriesData['type']): string {
+    return mediaType == 'manhwa' ? 'ko' : mediaType == 'manhua' ? 'zh' : 'ja'
+  }
+
+  function getTitle(titles: TitlesV2[], mediaType: SeriesData['type']): string {
+    const filters: { primaries: TitlesV2[]; lang?: TitlesV2[]; officials?: TitlesV2[] } = {
+      primaries: [],
+    }
+    filters['primaries'] = titles
+      .sort((a, b) => a.language.localeCompare(b.language))
+      .filter(t => t.is_primary)
+    if (filters['primaries'].length)
+      filters['lang'] = filters['primaries'].filter(
+        t =>
+          t.language ==
+          (options.english && filters['primaries'].find(p => p.language == 'en')
+            ? 'en'
+            : entryLanguage(mediaType) + '-Latn'),
+      )
+    if (filters['lang']?.length)
+      filters['officials'] = filters['lang'].filter(t => t.traits.includes('official'))
+    return (filters.officials?.shift() || filters.lang?.shift() || filters.primaries[0]).title
+  }
+
   function buildInfo(page: SeriesData) {
     const info = new MangaInfo({
       source: source,
-      title:
-        (options.english
-          ? page.titles.find(t => t.is_primary && t.language === 'en')?.title
-          : page.titles.find(
-              t => t.is_primary && t.language !== 'en' && t.traits.includes('official'),
-            )?.title) || page.titles.find(t => t.is_primary)?.title,
-      genre: [
-        ...[
-          ...(page.tags_v2 || [])
-            .filter(
-              (t, _, a) =>
-                t.name_path.startsWith('Theme') &&
-                !a.map(x => x.parent_id).includes(t.id) &&
-                t.implied_by_tag_ids.length == 0,
-            )
-            .sort(),
-          ...(page.genres || [])
-            .filter(g => !page.tags_v2.map(t => t.name.toLowerCase()).includes(g.toLowerCase()))
-            .map(g => {
-              return { name: g, name_path: `Genre > ${capitalizeTags(g)}` }
-            })
-            .sort(),
-          ...(page.tags_v2 || [])
-            .filter(
-              (t, _, a) =>
-                !t.name_path.startsWith('Theme') &&
-                !a.map(x => x.parent_id).includes(t.id) &&
-                t.implied_by_tag_ids.length == 0,
-            )
-            .sort(),
-          ...(page.tags || [])
-            .filter(t => !page.tags_v2.map(tt => tt.name.toLowerCase()).includes(t.toLowerCase()))
-            .map(t => {
-              return { name: t, name_path: `Other > ${t}` }
-            })
-            .sort(),
-        ].map(t =>
-          options.groupTags
-            ? [t.name_path.split(' > ')[0], t.name_path.split(' > ').pop()].join(':')
-            : t.name,
-        ),
-        ...(options.showLicensed && page.publishers !== null
-          ? page.publishers.map(p => (options.groupTags ? `Licensed:${p.name}` : p.name))
-          : []),
-      ],
+      title: getTitle(page.titles, page.type),
+      genre: [],
       artist: page.artists,
       author: page.authors,
       cover: page.cover.raw?.url || page.cover.x350?.x1,
@@ -183,6 +165,62 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         .filter(u => u)
         .join(' '),
     })
+
+    const tags: { [k: string]: string[] } = {
+      Genre: [
+        ...(page.tags_v2 || [])
+          .filter(
+            (t, _, a) =>
+              t.is_genre &&
+              !a.map(x => x.parent_id).includes(t.id) &&
+              t.implied_by_tag_ids.length == 0 &&
+              (options.spoilers ? true : !t.is_spoiler),
+          )
+          .map(x => x.name),
+        ...(page.genres || []).filter(
+          g => !page.tags_v2.map(t => t.name.toLowerCase()).includes(g.toLowerCase()),
+        ),
+      ],
+      Themes: (page.tags_v2 || [])
+        .filter(
+          (t, _, a) =>
+            t.name_path.startsWith('Themes') &&
+            !a.map(x => x.parent_id).includes(t.id) &&
+            t.implied_by_tag_ids.length == 0 &&
+            (options.spoilers ? true : !t.is_spoiler),
+        )
+        .map(t => t.name),
+    }
+
+    page.tags_v2
+      .filter(
+        (t, _, a) =>
+          !Object.values(tags).flat().includes(t.name) &&
+          !a.map(x => x.parent_id).includes(t.id) &&
+          t.implied_by_tag_ids.length == 0 &&
+          (options.spoilers ? true : !t.is_spoiler),
+      )
+      .forEach(t => {
+        const path = t.name_path.split(' > ')
+        if (path.length > 0) {
+          const namespace = path.shift() || ''
+          const val = path.pop() || ''
+          if (tags[namespace] === undefined) {
+            tags[namespace] = []
+          }
+          tags[namespace].push(val)
+        }
+      })
+
+    tags['Other'] = (page.tags || []).filter(
+      t => !page.tags_v2.map(tt => tt.name.toLowerCase()).includes(t.toLowerCase()),
+    )
+    tags['Licensed'] = page.publishers?.map(p => p.name) || []
+
+    info.genre = options.groupTags
+      ? Object.keys(tags).flatMap(namespace => tags[namespace].map(t => `${namespace}:${t}`).sort())
+      : Object.values(tags).flat().sort()
+
     const description = []
     const descriptionHeader = []
     if (page.rating) {
@@ -216,10 +254,25 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
 
     if (page.description) description.push(stripHtmlTags(page.description))
 
-    const altTitles = page.titles.map(t => t.title).filter(t => t && t != info.title)
+    const lang_prio: string[] = [
+      ...(options.english ? ['en'] : []),
+      ...[entryLanguage(page.type) + '-Latn', entryLanguage(page.type)],
+    ]
+
+    const altTitles = page.titles.sort((a, b) =>
+      a.language.slice(0, 2).localeCompare(b.language.slice(0, 2)),
+    )
+    for (const l of lang_prio.reverse()) {
+      altTitles.unshift(...page.titles.filter(t => t.language == l))
+    }
     if (altTitles.length > 0) {
       description.push('')
-      description.push('Alternate titles:\n' + altTitles.map(t => `  - ${t}`).join('\n'))
+      description.push(
+        'Alternate titles:\n' +
+          unique(altTitles.map(t => t.title).filter(t => t && t != info.title))
+            .map(t => `  - ${t}`)
+            .join('\n'),
+      )
     }
 
     info.description = description.join(blankLine)

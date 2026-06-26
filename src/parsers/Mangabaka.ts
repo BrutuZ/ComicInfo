@@ -1,4 +1,4 @@
-import { blankLine, DEV, replaceSmartQuotes, stripHtmlTags, unique } from '@/main'
+import { blankLine, capitalizeTags, DEV, replaceSmartQuotes, stripHtmlTags, unique } from '@/main'
 import type {
   MangaResponse,
   SearchResponse,
@@ -177,9 +177,9 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
               (options.spoilers ? true : !t.is_spoiler),
           )
           .map(x => x.name),
-        ...(page.genres || []).filter(
-          g => !page.tags_v2.map(t => t.name.toLowerCase()).includes(g.toLowerCase()),
-        ),
+        ...(page.genres || [])
+          .filter(g => !page.tags_v2.map(t => t.name.toLowerCase()).includes(g.toLowerCase()))
+          .map(t => capitalizeTags(t)),
       ],
       Themes: (page.tags_v2 || [])
         .filter(

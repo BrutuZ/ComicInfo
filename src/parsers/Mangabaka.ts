@@ -34,7 +34,7 @@ export function MangaBaka(): Searcher
 export function MangaBaka(url?: string, options?: ParserOptions): Searcher
 export function MangaBaka(url: string = '', options: ParserOptions = {}): Searcher {
   const source = { name: 'MangaBaka', url: 'https://mangabaka.org', icon: 'mb.png' }
-  const apiUrl = 'https://api.mangabaka.dev'
+  const apiUrl = 'https://api.mangabaka.org'
   const urlRE =
     new RegExp('(?<protocol>https?://)?' + source.url.slice(8) + '/(?<id>\\d+)').exec(url)
       ?.groups || {}

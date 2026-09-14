@@ -173,7 +173,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
             (t, _, a) =>
               t.is_genre &&
               !a.map(x => x.parent_id).includes(t.id) &&
-              t.implied_by_tag_ids.length == 0 &&
+              t.is_explicit &&
               (options.spoilers ? true : !t.is_spoiler),
           )
           .map(x => x.name),
@@ -186,7 +186,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
           (t, _, a) =>
             t.name_path.startsWith('Themes') &&
             !a.map(x => x.parent_id).includes(t.id) &&
-            t.implied_by_tag_ids.length == 0 &&
+            t.is_explicit &&
             (options.spoilers ? true : !t.is_spoiler),
         )
         .map(t => t.name),
@@ -197,7 +197,7 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         (t, _, a) =>
           !Object.values(tags).flat().includes(t.name) &&
           !a.map(x => x.parent_id).includes(t.id) &&
-          t.implied_by_tag_ids.length == 0 &&
+          t.is_explicit &&
           (options.spoilers ? true : !t.is_spoiler),
       )
       .forEach(t => {

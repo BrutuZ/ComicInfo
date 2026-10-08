@@ -212,9 +212,6 @@ export function MangaBaka(url: string = '', options: ParserOptions = {}): Search
         }
       })
 
-    tags['Other'] = (page.tags || []).filter(
-      t => !page.tags_v2.map(tt => tt.name.toLowerCase()).includes(t.toLowerCase()),
-    )
     tags['Licensed'] = page.publishers?.map(p => p.name) || []
 
     info.genre = options.groupTags
